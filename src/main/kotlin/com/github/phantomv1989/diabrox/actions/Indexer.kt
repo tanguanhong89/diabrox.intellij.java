@@ -1,6 +1,9 @@
 package com.github.phantomv1989.diabrox.actions
 
-import com.github.phantomv1989.diabrox.actions.Traversal.Companion.checkExpressionList
+import com.github.phantomv1989.diabrox.actions.Traversal.Companion.checkIsInvalidExpressionList
+import com.github.phantomv1989.diabrox.actions.Traversal.Companion.isSkippable
+import com.github.phantomv1989.diabrox.actions.Traversal.Companion.isStubIgnored
+import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.elementType
@@ -19,108 +22,116 @@ class Indexer {
             "ref",
             "new",
             "assignment",
-            "call"
+            "callargs"
         )
     )
-    var hobj = HierarchicalObj("root", "", "root", null)
-    var nodeIndex: HashMap<String, HierarchicalObj> = HashMap()
 
-    fun getNodesJsonString(): String {
-        return hobj.toString()
-    }
-
-    fun getLinksString(): String {
-        val r: MutableList<String> = ArrayList()
-        for (nodeId in nodeIndex.keys) {
-            val node = nodeIndex.get(nodeId)
-            node?.let {
-                for (l in node.links) {
-                    r.add("{\"src\":" + node.id + ",\"type\":\"" + l.type + "\",\"dst\":" + l.target.id + "}")
-                }
-            }
+    fun psiToNode(ele: PsiElement): GraphNode {
+        val s1 = ele.toString().split(":")
+        var s2 = s1[0]
+        if (s1.size > 1) {
+            s2 = s1[1]
         }
-        return "[" + r.joinToString(",") + "]"
+        s2 = s2.replace("\"", "'").replace("\n", "\\n")
+
+        return GraphNode(s2, getHash(ele), ele.elementType.toString(), ele)
     }
 
-    fun addLink(src: PsiElement, tgt: PsiElement, type: String, value: Int?) {
-        val srcNode = addElement(src)
-        val tgtNode = addElement(tgt)
+    fun getHash(ele: PsiElement): String {
+        return System.identityHashCode(ele).toString()
+    }
 
-        addStructNode(src)
-        addStructNode(tgt)
+//    fun getNodesJsonString(): String {
+//        return hobj.toString()
+//    }
+//
+//    fun getLinksString(): String {
+//        val r: MutableList<String> = ArrayList()
+//        for (nodeId in nodeIndex.keys) {
+//            val node = nodeIndex.get(nodeId)
+//            node?.let {
+//                for (l in node.links) {
+//                    r.add("{\"src\":" + node.id + ",\"type\":\"" + l.type + "\",\"dst\":" + l.target.id + "}")
+//                }
+//            }
+//        }
+//        return "[" + r.joinToString(",") + "]"
+//    }
+
+    fun addDataLink(src: PsiElement, tgt: PsiElement, type: String, value: Int?) {
+        val srcNode = addStructNode(src)
+        val tgtNode = addStructNode(tgt)
+
         srcNode?.let {
-            tgtNode?.let { srcNode.addTarget(tgtNode, type, value) }
+            tgtNode?.let {
+                DataGraph.addNode(srcNode)
+                DataGraph.addNode(tgtNode)
+                srcNode.addLink(tgtNode, type, value)
+            }
         }
     }
 
-    fun addStructNode(ele: PsiElement): GraphNode? {
-        val etype = ele.elementType.toString()
-        val id = System.identityHashCode(ele).toString()
-        if (StructureGraph.IdIndex.containsKey(id)) return StructureGraph.IdIndex.get(id)
+    fun addStructNode(ele: PsiElement?): GraphNode? {
+        if (ele == null) return null
+        val id = getHash(ele)
+        if (StructureGraph.IdIndex.containsKey(id)) return StructureGraph.getId(id)
 
-        val eleParent = ele.parent
-        var lastExistingParent: GraphNode = hobj
-        if (eleParent != null) {
-            lastExistingParent = addElement(eleParent)
-        }
-        fun foo(lastExistingParent: GraphNode): GraphNode {
-            val s1 = ele.toString().split(":")
-            var s2 = s1[0]
-            if (s1.size > 1) {
-                s2 = s1[1]
-            }
-            s2 = s2.replace("\"", "'").replace("\n", "\\n")
-            val nodeObj = HierarchicalObj(s2, id, etype, ele)
+        var lastExistingParent = addStructNode(ele.parent)
 
+        fun foo(lastExistingParent: GraphNode?): GraphNode {
             var offsetKey = ele.startOffsetInParent
-            if (ele is PsiFile) {
-                offsetKey = lastExistingParent.findLinks(mutableSetOf("child")).size
+            var nodeObj = psiToNode(ele)
+            if (lastExistingParent != null) {
+                if (ele is PsiFile) {
+                    offsetKey = lastExistingParent.findLinks(mutableSetOf("child")).size
+                }
+                lastExistingParent.addLink(nodeObj, "child", offsetKey)
             }
-            lastExistingParent.addTarget(nodeObj, "child", offsetKey)
-            nodeObj.addSource(nodeObj, "parent", offsetKey)
             StructureGraph.addNode(nodeObj)
             return nodeObj
         }
-        if (ele is PsiFile) {
-            return foo(lastExistingParent)
-        }
-        if (!checkExpressionList(ele)) return lastExistingParent
-        if (Traversal.isBlacklisted(ele)) return lastExistingParent
+        if (ele is PsiFile) return foo(lastExistingParent)
+        if (ele is PsiDirectory) return foo(lastExistingParent)
+        if (checkIsInvalidExpressionList(ele)) return lastExistingParent
+        if (isStubIgnored(ele)) return null
+        if (isSkippable(ele) && !(ele is PsiFile)) return lastExistingParent
         return foo(lastExistingParent)
     }
 
-    fun addElement(ele: PsiElement): HierarchicalObj {
-        val etype = ele.elementType.toString()
-        val id = System.identityHashCode(ele).toString()
-        if (nodeIndex.containsKey(id)) return nodeIndex.getOrDefault(id, hobj)
+    fun computeGraphs() {
+        StructureGraph.calculateHeads()
+        DataGraph.calculateHeads()
+    }
 
-        val eleParent = ele.parent
-        var lastExistingParent: HierarchicalObj = hobj
-        if (eleParent != null) {
-            lastExistingParent = addElement(eleParent)
-        }
-        fun foo(lastExistingParent: HierarchicalObj): HierarchicalObj {
-            val s1 = ele.toString().split(":")
-            var s2 = s1[0]
-            if (s1.size > 1) {
-                s2 = s1[1]
-            }
-            s2 = s2.replace("\"", "'").replace("\n", "\\n")
-            val nodeObj = HierarchicalObj(s2, id, etype, ele)
 
-            var offsetKey = ele.startOffsetInParent
-            if (ele is PsiFile) {
-                offsetKey = lastExistingParent.children.size
+    fun toJsonStringNodes(): String {
+        fun foo(n: GraphNode): String {
+            var r = ArrayList<String>()
+            r.add("\"name\":\"" + n.name + "\"")
+            r.add("\"id\":\"" + n.id + "\"")
+            r.add("\"type\":\"" + n.type + "\"")
+            r.add("\"value\":" + n.value.toString() + "")
+            var children = n.findLinksWithDirection(StructureGraph.ForLinks, true)
+            if (children.size > 0) {
+                r.add("\"children\":[" + children.map { x -> foo(x.target) }.joinToString(",") + "]")
             }
-            lastExistingParent.addChild(nodeObj, offsetKey)
-            nodeIndex.put(nodeObj.id, nodeObj)
-            return nodeObj
+            return "{" + r.joinToString(",") + "}"
         }
-        if (ele is PsiFile) {
-            return foo(lastExistingParent)
+        return "[" + StructureGraph.heads.values.map { x -> foo(x) }.joinToString(",") + "]"
+    }
+
+    fun toJsonStringLinks(): String {
+        var r = ArrayList<String>()
+        for (n in DataGraph.IdIndex.values) {
+            var links = n.findLinksWithDirection(DataGraph.ForLinks, true)
+            for (l in links) {
+                var r2 = ArrayList<String>()
+                r2.add("\"src\":" + n.id)
+                r2.add("\"dst\":" + l.target.id)
+                r2.add("\"type\":" + "\"" + l.type + "\"")
+                r.add("{" + r2.joinToString(",") + "}")
+            }
         }
-        if (!checkExpressionList(ele)) return lastExistingParent
-        if (Traversal.isBlacklisted(ele)) return lastExistingParent
-        return foo(lastExistingParent)
+        return "[" + r.joinToString(",") + "]"
     }
 }

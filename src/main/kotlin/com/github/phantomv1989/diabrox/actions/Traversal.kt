@@ -6,19 +6,18 @@ import com.intellij.psi.util.elementType
 
 class Traversal {
     companion object {
-        fun traverseElement(ele: PsiElement, nodeIndex: Indexer) {
+        fun traverseElement(ele: PsiElement, indexer: Indexer) {
             if (isStubIgnored(ele)) return
-            findLinks(ele, nodeIndex)
-            nodeIndex.addElement(ele)
-            nodeIndex.addStructNode(ele)
-            for (x1 in ele.children) traverseElement(x1, nodeIndex)
+            findLinks(ele, indexer)
+            indexer.addStructNode(ele)
+            for (x1 in ele.children) traverseElement(x1, indexer)
         }
 
         fun findLinks(ele: PsiElement, nodeIndex: Indexer) {
             findRef(ele, nodeIndex)
             findNew(ele, nodeIndex)
             findAssignment(ele, nodeIndex)
-            findMethodCall(ele, nodeIndex)
+            findMethodCallArgs(ele, nodeIndex)
         }
 
         fun findRef(ele: PsiElement, nodeIndex: Indexer) {
@@ -28,10 +27,14 @@ class Traversal {
                 var refEle = y?.originalElement
                 if (refEle != null) {
                     if (refEle.containingFile != null) {
-                        nodeIndex.addLink(ele, refEle, "ref",null)
+                        nodeIndex.addDataLink(ele, refEle, "ref", null)
                     }
                 }
             }
+        }
+
+        fun findBinary(ele: PsiElement, nodeIndex: Indexer) {
+
         }
 
         fun findNew(ele: PsiElement, nodeIndex: Indexer) {
@@ -41,7 +44,9 @@ class Traversal {
                 eleParent = eleParent.parent
             }
             for (child in ele.children) {
-                nodeIndex.addLink(eleParent, child, "new",null)
+                if(!checkIsInvalidExpressionList(child)){
+                    nodeIndex.addDataLink(eleParent, child, "new", null)
+                }
             }
         }
 
@@ -51,7 +56,7 @@ class Traversal {
                 if (child.elementType.toString().equals("REFERENCE_EXPRESSION")) {
                     for (child1 in ele.children) {
                         if (!child1.elementType.toString().equals("REFERENCE_EXPRESSION")) {
-                            nodeIndex.addLink(child, child1, "assignment",null)
+                            nodeIndex.addDataLink(child, child1, "assignment", null)
                         }
                     }
                     break
@@ -59,14 +64,16 @@ class Traversal {
             }
         }
 
-        fun findMethodCall(ele: PsiElement, nodeIndex: Indexer) {
+        fun findMethodCallArgs(ele: PsiElement, nodeIndex: Indexer) {
             // if no args, then no tgt
             if (ele.elementType.toString() != "METHOD_CALL_EXPRESSION") return
             for (child in ele.children) {
                 if (child.elementType.toString().equals("REFERENCE_EXPRESSION")) {
                     for (child1 in ele.children) {
-                        if (!child1.elementType.toString().equals("REFERENCE_EXPRESSION")) {
-                            if (checkExpressionList(child1)) nodeIndex.addLink(child, child1, "call",null)
+                        if (child1.elementType.toString() == "EXPRESSION_LIST") {
+                            for (child2 in child1.children) {
+                                nodeIndex.addDataLink(child, child2, "callargs", null)
+                            }
                         }
                     }
                     break
@@ -81,30 +88,13 @@ class Traversal {
                 "DOC_COMMENT_LEADING_ASTERISKS",
                 "DOC_COMMENT_DATA",
                 "TRUE_KEYWORD",
-
-                )
-            return ignoredL.contains(ele.elementType.toString())
-        }
-
-        fun isBlacklisted(ele: PsiElement): Boolean {
-            val blacklist = mutableSetOf(
-                "null",
                 "PACKAGE_KEYWORD",
                 "IMPORT_KEYWORD",
-                "IMPORT_STATEMENT",
-                "IMPORT_LIST",
                 "WHITE_SPACE",
-                "MODIFIER_LIST",
                 "SEMICOLON",
                 "COMMA",
                 "EQ",
-                "TYPE",
-                "TYPE_PARAMETER_LIST",
-                "EXTENDS_LIST",
-                "IMPLEMENTS_LIST",
-                "THROWS_LIST",
                 "DOC_COMMENT",
-                "REFERENCE_PARAMETER_LIST",
                 "END_OF_LINE_COMMENT",
                 "C_STYLE_COMMENT",
                 "LBRACE",
@@ -114,18 +104,32 @@ class Traversal {
                 "DOT",
                 "CLASS_KEYWORD",
                 "NEW_KEYWORD",
-                "NE",
+                "REFERENCE_PARAMETER_LIST",
                 "IDENTIFIER",
-                "STRING_LITERAL",
+                "STRING_LITERAL"
             )
-            return blacklist.contains(ele.elementType.toString())
+            return ignoredL.contains(ele.elementType.toString())
         }
 
-        fun checkExpressionList(ele: PsiElement): Boolean {
+        fun isSkippable(ele: PsiElement): Boolean {
+            val skip = mutableSetOf(
+                "null",
+                "IMPORT_STATEMENT",
+                "IMPORT_LIST",
+                "MODIFIER_LIST",
+                "TYPE",
+                "TYPE_PARAMETER_LIST",
+                "EXTENDS_LIST",
+                "IMPLEMENTS_LIST",
+                "THROWS_LIST",
+            )
+            return skip.contains(ele.elementType.toString())
+        }
+
+        fun checkIsInvalidExpressionList(ele: PsiElement): Boolean {
             // EXPRESSION_LIST
-            if (ele.elementType.toString() != "EXPRESSION_LIST") return true
-            return ele.children.size > 2
+            if (ele.elementType.toString() != "EXPRESSION_LIST") return false
+            return ele.children.size <= 2
         }
-
     }
 }
