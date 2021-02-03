@@ -111,8 +111,8 @@ class Indexer {
     fun toJsonStringNodes(): String {
         fun foo(n: GraphNode): String {
             var r = ArrayList<String>()
-//            r.add("\"name\":\"" + n.name + "\"")
-//            r.add("\"id\":\"" + n.id + "\"")
+            r.add("\"name\":\"" + n.name + "\"")
+            r.add("\"id\":\"" + n.id + "\"")
             r.add("\"type\":\"" + n.type + "\"")
             r.add("\"value\":" + n.value.toString() + "")
             var children = n.findLinksWithDirection(StructureGraph.ForLinks, true)
@@ -122,8 +122,8 @@ class Indexer {
             return "{" + r.joinToString(",") + "}"
         }
         var r1 = ArrayList<String>()
-//        r1.add("\"name\":\"root\"")
-//        r1.add("\"id\":\"0\"")
+        r1.add("\"name\":\"root\"")
+        r1.add("\"id\":\"0\"")
         r1.add("\"type\":\"root\"")
         r1.add("\"value\":1")
         r1.add("\"children\":[" + StructureGraph.heads.values.map { x -> foo(x) }.joinToString(",") + "]")
