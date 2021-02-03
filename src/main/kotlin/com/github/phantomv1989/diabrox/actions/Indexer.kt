@@ -26,7 +26,7 @@ class Indexer {
         )
     )
 
-    fun psiToNode(ele: PsiElement): GraphNode {
+    fun psiToNode(ele: PsiElement, value: Int = 1): GraphNode {
         val s1 = ele.toString().split(":")
         var s2 = s1[0]
         if (s1.size > 1) {
@@ -34,7 +34,7 @@ class Indexer {
         }
         s2 = s2.replace("\"", "'").replace("\n", "\\n")
 
-        return GraphNode(s2, getHash(ele), ele.elementType.toString(), ele)
+        return GraphNode(s2, getHash(ele), ele.elementType.toString(), ele, value)
     }
 
     fun getHash(ele: PsiElement): String {
@@ -80,7 +80,11 @@ class Indexer {
 
         fun foo(lastExistingParent: GraphNode?): GraphNode {
             var offsetKey = ele.startOffsetInParent
-            var nodeObj = psiToNode(ele)
+            var nodeObj = if (ele.elementType.toString().equals("LITERAL_EXPRESSION")) {
+                psiToNode(ele, 5)
+            } else {
+                psiToNode(ele)
+            }
             if (lastExistingParent != null) {
                 if (ele is PsiFile) {
                     offsetKey = lastExistingParent.findLinks(mutableSetOf("child")).size
@@ -99,16 +103,16 @@ class Indexer {
     }
 
     fun computeGraphs() {
-        StructureGraph.calculateHeads()
-        DataGraph.calculateHeads()
+        StructureGraph.calculateAll()
+        //DataGraph.calculateHeads()
     }
 
 
     fun toJsonStringNodes(): String {
         fun foo(n: GraphNode): String {
             var r = ArrayList<String>()
-            r.add("\"name\":\"" + n.name + "\"")
-            r.add("\"id\":\"" + n.id + "\"")
+//            r.add("\"name\":\"" + n.name + "\"")
+//            r.add("\"id\":\"" + n.id + "\"")
             r.add("\"type\":\"" + n.type + "\"")
             r.add("\"value\":" + n.value.toString() + "")
             var children = n.findLinksWithDirection(StructureGraph.ForLinks, true)
@@ -117,7 +121,13 @@ class Indexer {
             }
             return "{" + r.joinToString(",") + "}"
         }
-        return "[" + StructureGraph.heads.values.map { x -> foo(x) }.joinToString(",") + "]"
+        var r1 = ArrayList<String>()
+//        r1.add("\"name\":\"root\"")
+//        r1.add("\"id\":\"0\"")
+        r1.add("\"type\":\"root\"")
+        r1.add("\"value\":1")
+        r1.add("\"children\":[" + StructureGraph.heads.values.map { x -> foo(x) }.joinToString(",") + "]")
+        return "{" + r1.joinToString(",") + "}"
     }
 
     fun toJsonStringLinks(): String {

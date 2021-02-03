@@ -15,9 +15,10 @@ class Traversal {
 
         fun findLinks(ele: PsiElement, nodeIndex: Indexer) {
             findRef(ele, nodeIndex)
-            findNew(ele, nodeIndex)
-            findAssignment(ele, nodeIndex)
-            findMethodCallArgs(ele, nodeIndex)
+//            findBinary(ele, nodeIndex)
+//            findNew(ele, nodeIndex)
+//            findAssignment(ele, nodeIndex)
+//            findMethodCallArgs(ele, nodeIndex)
         }
 
         fun findRef(ele: PsiElement, nodeIndex: Indexer) {
@@ -34,7 +35,21 @@ class Traversal {
         }
 
         fun findBinary(ele: PsiElement, nodeIndex: Indexer) {
-
+            // *_EXPRESSION to *_EXPRESSION
+            if (ele.elementType.toString() != "BINARY_EXPRESSION") return
+            for (child in ele.children) {
+                if (child.elementType.toString().endsWith("_EXPRESSION")) {
+                    var c = child.nextSibling
+                    while (c != null) {
+                        if (c.elementType.toString().endsWith("_EXPRESSION")) {
+                            nodeIndex.addDataLink(child, c, "binary", null)
+                        } else {
+                            c = child.nextSibling
+                        }
+                    }
+                    break
+                }
+            }
         }
 
         fun findNew(ele: PsiElement, nodeIndex: Indexer) {
@@ -44,7 +59,7 @@ class Traversal {
                 eleParent = eleParent.parent
             }
             for (child in ele.children) {
-                if(!checkIsInvalidExpressionList(child)){
+                if (!checkIsInvalidExpressionList(child)) {
                     nodeIndex.addDataLink(eleParent, child, "new", null)
                 }
             }
@@ -106,7 +121,9 @@ class Traversal {
                 "NEW_KEYWORD",
                 "REFERENCE_PARAMETER_LIST",
                 "IDENTIFIER",
-                "STRING_LITERAL"
+                "STRING_LITERAL",
+                "INTEGER_LITERAL", "INT_KEYWORD", "STATIC_KEYWORD",
+                "TRY_KEYWORD",
             )
             return ignoredL.contains(ele.elementType.toString())
         }

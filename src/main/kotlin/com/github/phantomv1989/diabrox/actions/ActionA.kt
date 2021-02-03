@@ -25,7 +25,8 @@ internal class ActionA : AnAction() {
         }
         myIndex.computeGraphs()
         var r = myIndex.toJsonStringNodes()
-        var r1 = myIndex.toJsonStringLinks()
+        //var r1 = myIndex.toJsonStringLinks()
+        myIndex.StructureGraph.collapseGraph()
     }
 
 

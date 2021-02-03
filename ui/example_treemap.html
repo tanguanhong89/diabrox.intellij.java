@@ -1,0 +1,1958 @@
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <style>
+      body {
+        margin: 0;
+      }
+    </style>
+    <style type="text/css">
+      .force-graph-container .graph-tooltip {
+        position: absolute;
+        transform: translate(-50%, 25px);
+        font-family: sans-serif;
+        font-size: 16px;
+        padding: 4px;
+        border-radius: 3px;
+        color: #eee;
+        background: rgba(0, 0, 0, 0.65);
+        visibility: hidden; /* by default */
+      }
+    </style>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src=" https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  </head>
+
+  <body>
+    <canvas id="canvas" width="3800" height="2000"></canvas>
+  </body>
+  <script>
+    // https://github.com/d3/d3-scale-chromatic
+    let data = {
+      name: "tokens",
+      value: 1,
+      id: "",
+      type: "null",
+      children: [
+        {
+          name: "/home/phantomv/.jdks/corretto-11.0.9.1!/",
+          id: "1377357964",
+          type: "null",
+          value: 1,
+          children: [
+            {
+              name: "/home/phantomv/.jdks/corretto-11.0.9.1!/java.base/java",
+              id: "1281210435",
+              type: "null",
+              value: 1,
+              children: [
+                {
+                  name:
+                    "/home/phantomv/.jdks/corretto-11.0.9.1!/java.base/java/lang",
+                  id: "892899071",
+                  type: "null",
+                  value: 1,
+                  children: [
+                    {
+                      name: "StringBuilder",
+                      id: "137992620",
+                      type: "CLASS",
+                      value: 1,
+                      children: [
+                        {
+                          name: "append",
+                          id: "1407960784",
+                          type: "METHOD",
+                          value: 1,
+                        },
+                        {
+                          name: "toString",
+                          id: "306221888",
+                          type: "METHOD",
+                          value: 1,
+                        },
+                      ],
+                    },
+                    {
+                      name: "String",
+                      id: "607775816",
+                      type: "CLASS",
+                      value: 1,
+                    },
+                    {
+                      name: "Throwable",
+                      id: "1973752365",
+                      type: "CLASS",
+                      value: 1,
+                      children: [
+                        {
+                          name: "printStackTrace",
+                          id: "480953454",
+                          type: "METHOD",
+                          value: 1,
+                        },
+                      ],
+                    },
+                    {
+                      name: "System",
+                      id: "510777330",
+                      type: "CLASS",
+                      value: 1,
+                      children: [
+                        {
+                          name: "lineSeparator",
+                          id: "991573129",
+                          type: "METHOD",
+                          value: 1,
+                        },
+                        {
+                          name: "loadLibrary",
+                          id: "67428567",
+                          type: "METHOD",
+                          value: 1,
+                        },
+                        {
+                          name: "out",
+                          id: "728526731",
+                          type: "FIELD",
+                          value: 1,
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  name:
+                    "/home/phantomv/.jdks/corretto-11.0.9.1!/java.base/java/io",
+                  id: "224548779",
+                  type: "null",
+                  value: 1,
+                  children: [
+                    {
+                      name: "BufferedReader",
+                      id: "1765324274",
+                      type: "CLASS",
+                      value: 1,
+                      children: [
+                        {
+                          name: "readLine",
+                          id: "242291672",
+                          type: "METHOD",
+                          value: 1,
+                        },
+                      ],
+                    },
+                    {
+                      name: "IOException",
+                      id: "1085544394",
+                      type: "CLASS",
+                      value: 1,
+                    },
+                    {
+                      name: "PrintStream",
+                      id: "1179298045",
+                      type: "CLASS",
+                      value: 1,
+                      children: [
+                        {
+                          name: "println",
+                          id: "1921826835",
+                          type: "METHOD",
+                          value: 1,
+                        },
+                      ],
+                    },
+                    {
+                      name: "FileReader",
+                      id: "1455277277",
+                      type: "CLASS",
+                      value: 1,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "/",
+          id: "685755492",
+          type: "null",
+          value: 1,
+          children: [
+            {
+              name: "/home/phantomv",
+              id: "2119598034",
+              type: "null",
+              value: 1,
+              children: [
+                {
+                  name: "/home/phantomv/Desktop/experimental",
+                  id: "1546812780",
+                  type: "null",
+                  value: 1,
+                  children: [
+                    {
+                      name:
+                        "/home/phantomv/Desktop/experimental/java_basic_io/basicIO",
+                      id: "788388273",
+                      type: "null",
+                      value: 1,
+                      children: [
+                        {
+                          name:
+                            "/home/phantomv/Desktop/experimental/java_basic_io/basicIO/src",
+                          id: "327033093",
+                          type: "null",
+                          value: 1,
+                          children: [
+                            {
+                              name:
+                                "/home/phantomv/Desktop/experimental/java_basic_io/basicIO/src/main/java",
+                              id: "2102100152",
+                              type: "null",
+                              value: 1,
+                              children: [
+                                {
+                                  name:
+                                    "/home/phantomv/Desktop/experimental/java_basic_io/basicIO/src/main/java/com/example1",
+                                  id: "567660468",
+                                  type: "null",
+                                  value: 1,
+                                  children: [
+                                    {
+                                      name: "App.java",
+                                      id: "726651032",
+                                      type: "java.FILE",
+                                      value: 1,
+                                      children: [
+                                        {
+                                          name: "com.example1",
+                                          id: "362004339",
+                                          type: "JAVA_CODE_REFERENCE",
+                                          value: 1,
+                                          children: [
+                                            {
+                                              name: "com",
+                                              id: "1593465949",
+                                              type: "JAVA_CODE_REFERENCE",
+                                              value: 1,
+                                            },
+                                          ],
+                                        },
+                                        {
+                                          name: "Cc",
+                                          id: "1471612554",
+                                          type: "CLASS",
+                                          value: 1,
+                                          children: [
+                                            {
+                                              name: "Cc",
+                                              id: "1296329050",
+                                              type: "METHOD",
+                                              value: 1,
+                                              children: [
+                                                {
+                                                  name: "()",
+                                                  id: "287817987",
+                                                  type: "PARAMETER_LIST",
+                                                  value: 1,
+                                                },
+                                                {
+                                                  name: "PsiCodeBlock",
+                                                  id: "1042744527",
+                                                  type: "CODE_BLOCK",
+                                                  value: 1,
+                                                },
+                                                {
+                                                  name: "void",
+                                                  id: "740366219",
+                                                  type: "VOID_KEYWORD",
+                                                  value: 1,
+                                                },
+                                              ],
+                                            },
+                                            {
+                                              name: "aw",
+                                              id: "1485623873",
+                                              type: "METHOD",
+                                              value: 1,
+                                              children: [
+                                                {
+                                                  name: "PsiCodeBlock",
+                                                  id: "364351696",
+                                                  type: "CODE_BLOCK",
+                                                  value: 1,
+                                                },
+                                                {
+                                                  name: "()",
+                                                  id: "1721960402",
+                                                  type: "PARAMETER_LIST",
+                                                  value: 1,
+                                                },
+                                                {
+                                                  name: "void",
+                                                  id: "546612983",
+                                                  type: "VOID_KEYWORD",
+                                                  value: 1,
+                                                },
+                                              ],
+                                            },
+                                          ],
+                                        },
+                                        {
+                                          name: "App",
+                                          id: "19799582",
+                                          type: "CLASS",
+                                          value: 1,
+                                          children: [
+                                            {
+                                              name: "readFiles",
+                                              id: "950442600",
+                                              type: "METHOD",
+                                              value: 1,
+                                              children: [
+                                                {
+                                                  name: "public",
+                                                  id: "782814428",
+                                                  type: "PUBLIC_KEYWORD",
+                                                  value: 1,
+                                                },
+                                                {
+                                                  name: "PsiCodeBlock",
+                                                  id: "1866812639",
+                                                  type: "CODE_BLOCK",
+                                                  value: 1,
+                                                  children: [
+                                                    {
+                                                      name: "xx1.aw()",
+                                                      id: "1584528663",
+                                                      type:
+                                                        "METHOD_CALL_EXPRESSION",
+                                                      value: 1,
+                                                      children: [
+                                                        {
+                                                          name: "xx1",
+                                                          id: "1705960655",
+                                                          type:
+                                                            "REFERENCE_EXPRESSION",
+                                                          value: 1,
+                                                        },
+                                                      ],
+                                                    },
+                                                    {
+                                                      name: "PsiTryStatement",
+                                                      id: "644615668",
+                                                      type: "TRY_STATEMENT",
+                                                      value: 1,
+                                                      children: [
+                                                        {
+                                                          name: "PsiCodeBlock",
+                                                          id: "1984016947",
+                                                          type: "CODE_BLOCK",
+                                                          value: 1,
+                                                          children: [
+                                                            {
+                                                              name:
+                                                                "PsiWhileStatement",
+                                                              id: "1014919272",
+                                                              type:
+                                                                "WHILE_STATEMENT",
+                                                              value: 1,
+                                                              children: [
+                                                                {
+                                                                  name: "while",
+                                                                  id:
+                                                                    "414953314",
+                                                                  type:
+                                                                    "WHILE_KEYWORD",
+                                                                  value: 1,
+                                                                },
+                                                                {
+                                                                  name:
+                                                                    "line != null",
+                                                                  id:
+                                                                    "2036814001",
+                                                                  type:
+                                                                    "BINARY_EXPRESSION",
+                                                                  value: 1,
+                                                                  children: [
+                                                                    {
+                                                                      name:
+                                                                        "NE",
+                                                                      id:
+                                                                        "948366753",
+                                                                      type:
+                                                                        "NE",
+                                                                      value: 1,
+                                                                    },
+                                                                    {
+                                                                      name:
+                                                                        "NULL_KEYWORD",
+                                                                      id:
+                                                                        "1453847905",
+                                                                      type:
+                                                                        "NULL_KEYWORD",
+                                                                      value: 1,
+                                                                    },
+                                                                    {
+                                                                      name:
+                                                                        "line",
+                                                                      id:
+                                                                        "543576445",
+                                                                      type:
+                                                                        "REFERENCE_EXPRESSION",
+                                                                      value: 1,
+                                                                    },
+                                                                  ],
+                                                                },
+                                                                {
+                                                                  name:
+                                                                    "PsiCodeBlock",
+                                                                  id:
+                                                                    "1583732923",
+                                                                  type:
+                                                                    "CODE_BLOCK",
+                                                                  value: 1,
+                                                                  children: [
+                                                                    {
+                                                                      name:
+                                                                        "sb.append(System.lineSeparator())",
+                                                                      id:
+                                                                        "1769085539",
+                                                                      type:
+                                                                        "METHOD_CALL_EXPRESSION",
+                                                                      value: 1,
+                                                                      children: [
+                                                                        {
+                                                                          name:
+                                                                            "System.lineSeparator()",
+                                                                          id:
+                                                                            "1766536401",
+                                                                          type:
+                                                                            "METHOD_CALL_EXPRESSION",
+                                                                          value: 1,
+                                                                          children: [
+                                                                            {
+                                                                              name:
+                                                                                "System",
+                                                                              id:
+                                                                                "2052261730",
+                                                                              type:
+                                                                                "REFERENCE_EXPRESSION",
+                                                                              value: 1,
+                                                                            },
+                                                                          ],
+                                                                        },
+                                                                        {
+                                                                          name:
+                                                                            "sb",
+                                                                          id:
+                                                                            "1841207501",
+                                                                          type:
+                                                                            "REFERENCE_EXPRESSION",
+                                                                          value: 1,
+                                                                        },
+                                                                      ],
+                                                                    },
+                                                                    {
+                                                                      name:
+                                                                        "br.asdasd()",
+                                                                      id:
+                                                                        "1003557088",
+                                                                      type:
+                                                                        "METHOD_CALL_EXPRESSION",
+                                                                      value: 1,
+                                                                      children: [
+                                                                        {
+                                                                          name:
+                                                                            "br",
+                                                                          id:
+                                                                            "2103371061",
+                                                                          type:
+                                                                            "REFERENCE_EXPRESSION",
+                                                                          value: 1,
+                                                                        },
+                                                                      ],
+                                                                    },
+                                                                    {
+                                                                      name:
+                                                                        "line = br.readLine()",
+                                                                      id:
+                                                                        "1376531649",
+                                                                      type:
+                                                                        "ASSIGNMENT_EXPRESSION",
+                                                                      value: 1,
+                                                                      children: [
+                                                                        {
+                                                                          name:
+                                                                            "line",
+                                                                          id:
+                                                                            "750715653",
+                                                                          type:
+                                                                            "REFERENCE_EXPRESSION",
+                                                                          value: 1,
+                                                                        },
+                                                                        {
+                                                                          name:
+                                                                            "br.readLine",
+                                                                          id:
+                                                                            "1268925676",
+                                                                          type:
+                                                                            "REFERENCE_EXPRESSION",
+                                                                          value: 1,
+                                                                          children: [
+                                                                            {
+                                                                              name:
+                                                                                "br",
+                                                                              id:
+                                                                                "1563698668",
+                                                                              type:
+                                                                                "REFERENCE_EXPRESSION",
+                                                                              value: 1,
+                                                                            },
+                                                                          ],
+                                                                        },
+                                                                      ],
+                                                                    },
+                                                                    {
+                                                                      name:
+                                                                        "sb.append(line)",
+                                                                      id:
+                                                                        "924231113",
+                                                                      type:
+                                                                        "METHOD_CALL_EXPRESSION",
+                                                                      value: 1,
+                                                                      children: [
+                                                                        {
+                                                                          name:
+                                                                            "sb",
+                                                                          id:
+                                                                            "302035497",
+                                                                          type:
+                                                                            "REFERENCE_EXPRESSION",
+                                                                          value: 1,
+                                                                        },
+                                                                        {
+                                                                          name:
+                                                                            "line",
+                                                                          id:
+                                                                            "1168212502",
+                                                                          type:
+                                                                            "REFERENCE_EXPRESSION",
+                                                                          value: 1,
+                                                                        },
+                                                                      ],
+                                                                    },
+                                                                  ],
+                                                                },
+                                                              ],
+                                                            },
+                                                            {
+                                                              name:
+                                                                "System.out.println(qqweqw)",
+                                                              id: "363721045",
+                                                              type:
+                                                                "METHOD_CALL_EXPRESSION",
+                                                              value: 1,
+                                                              children: [
+                                                                {
+                                                                  name:
+                                                                    "qqweqw",
+                                                                  id:
+                                                                    "153001535",
+                                                                  type:
+                                                                    "REFERENCE_EXPRESSION",
+                                                                  value: 1,
+                                                                },
+                                                                {
+                                                                  name:
+                                                                    "System.out",
+                                                                  id:
+                                                                    "572187808",
+                                                                  type:
+                                                                    "REFERENCE_EXPRESSION",
+                                                                  value: 1,
+                                                                  children: [
+                                                                    {
+                                                                      name:
+                                                                        "System",
+                                                                      id:
+                                                                        "699518587",
+                                                                      type:
+                                                                        "REFERENCE_EXPRESSION",
+                                                                      value: 1,
+                                                                    },
+                                                                  ],
+                                                                },
+                                                              ],
+                                                            },
+                                                            {
+                                                              name: "sb",
+                                                              id: "1387662411",
+                                                              type:
+                                                                "LOCAL_VARIABLE",
+                                                              value: 1,
+                                                              children: [
+                                                                {
+                                                                  name:
+                                                                    "StringBuilder",
+                                                                  id:
+                                                                    "51988544",
+                                                                  type:
+                                                                    "JAVA_CODE_REFERENCE",
+                                                                  value: 1,
+                                                                },
+                                                                {
+                                                                  name:
+                                                                    "StringBuilder",
+                                                                  id:
+                                                                    "1612765036",
+                                                                  type:
+                                                                    "JAVA_CODE_REFERENCE",
+                                                                  value: 1,
+                                                                },
+                                                              ],
+                                                            },
+                                                            {
+                                                              name:
+                                                                "System.out.println(sb.toString())",
+                                                              id: "661717899",
+                                                              type:
+                                                                "METHOD_CALL_EXPRESSION",
+                                                              value: 1,
+                                                              children: [
+                                                                {
+                                                                  name:
+                                                                    "System.out",
+                                                                  id:
+                                                                    "1510102730",
+                                                                  type:
+                                                                    "REFERENCE_EXPRESSION",
+                                                                  value: 1,
+                                                                  children: [
+                                                                    {
+                                                                      name:
+                                                                        "System",
+                                                                      id:
+                                                                        "881634875",
+                                                                      type:
+                                                                        "REFERENCE_EXPRESSION",
+                                                                      value: 1,
+                                                                    },
+                                                                  ],
+                                                                },
+                                                                {
+                                                                  name:
+                                                                    "sb.toString()",
+                                                                  id:
+                                                                    "1609744646",
+                                                                  type:
+                                                                    "METHOD_CALL_EXPRESSION",
+                                                                  value: 1,
+                                                                  children: [
+                                                                    {
+                                                                      name:
+                                                                        "sb",
+                                                                      id:
+                                                                        "982658446",
+                                                                      type:
+                                                                        "REFERENCE_EXPRESSION",
+                                                                      value: 1,
+                                                                    },
+                                                                  ],
+                                                                },
+                                                              ],
+                                                            },
+                                                            {
+                                                              name: "line",
+                                                              id: "1582283183",
+                                                              type:
+                                                                "LOCAL_VARIABLE",
+                                                              value: 1,
+                                                              children: [
+                                                                {
+                                                                  name:
+                                                                    "br.readLine",
+                                                                  id:
+                                                                    "1066259828",
+                                                                  type:
+                                                                    "REFERENCE_EXPRESSION",
+                                                                  value: 1,
+                                                                  children: [
+                                                                    {
+                                                                      name:
+                                                                        "br",
+                                                                      id:
+                                                                        "1073406169",
+                                                                      type:
+                                                                        "REFERENCE_EXPRESSION",
+                                                                      value: 1,
+                                                                    },
+                                                                  ],
+                                                                },
+                                                                {
+                                                                  name:
+                                                                    "String",
+                                                                  id:
+                                                                    "140045929",
+                                                                  type:
+                                                                    "JAVA_CODE_REFERENCE",
+                                                                  value: 1,
+                                                                },
+                                                              ],
+                                                            },
+                                                          ],
+                                                        },
+                                                        {
+                                                          name: "br",
+                                                          id: "1673520717",
+                                                          type:
+                                                            "RESOURCE_VARIABLE",
+                                                          value: 1,
+                                                          children: [
+                                                            {
+                                                              name:
+                                                                "BufferedReader",
+                                                              id: "1167579584",
+                                                              type:
+                                                                "JAVA_CODE_REFERENCE",
+                                                              value: 1,
+                                                            },
+                                                            {
+                                                              name:
+                                                                "new BufferedReader(new FileReader('/home/phantomv/Desktop/experimental/java_basic_io/basicIO/src/main/java/com/example1/App.java'))",
+                                                              id: "1184117781",
+                                                              type:
+                                                                "NEW_EXPRESSION",
+                                                              value: 1,
+                                                              children: [
+                                                                {
+                                                                  name:
+                                                                    "BufferedReader",
+                                                                  id:
+                                                                    "480555501",
+                                                                  type:
+                                                                    "JAVA_CODE_REFERENCE",
+                                                                  value: 1,
+                                                                },
+                                                                {
+                                                                  name:
+                                                                    "new FileReader('/home/phantomv/Desktop/experimental/java_basic_io/basicIO/src/main/java/com/example1/App.java')",
+                                                                  id:
+                                                                    "2040974970",
+                                                                  type:
+                                                                    "NEW_EXPRESSION",
+                                                                  value: 1,
+                                                                  children: [
+                                                                    {
+                                                                      name:
+                                                                        "FileReader",
+                                                                      id:
+                                                                        "2065483121",
+                                                                      type:
+                                                                        "JAVA_CODE_REFERENCE",
+                                                                      value: 1,
+                                                                    },
+                                                                    {
+                                                                      name:
+                                                                        "'/home/phantomv/Desktop/experimental/java_basic_io/basicIO/src/main/java/com/example1/App.java'",
+                                                                      id:
+                                                                        "1702127836",
+                                                                      type:
+                                                                        "LITERAL_EXPRESSION",
+                                                                      value: 1,
+                                                                    },
+                                                                  ],
+                                                                },
+                                                              ],
+                                                            },
+                                                          ],
+                                                        },
+                                                        {
+                                                          name:
+                                                            "PsiCatchSection",
+                                                          id: "358726547",
+                                                          type: "CATCH_SECTION",
+                                                          value: 1,
+                                                          children: [
+                                                            {
+                                                              name:
+                                                                "IOException",
+                                                              id: "2102659685",
+                                                              type:
+                                                                "JAVA_CODE_REFERENCE",
+                                                              value: 1,
+                                                            },
+                                                            {
+                                                              name: "catch",
+                                                              id: "1002902059",
+                                                              type:
+                                                                "CATCH_KEYWORD",
+                                                              value: 1,
+                                                            },
+                                                            {
+                                                              name:
+                                                                "PsiExpressionStatement",
+                                                              id: "1046499552",
+                                                              type:
+                                                                "EXPRESSION_STATEMENT",
+                                                              value: 1,
+                                                              children: [
+                                                                {
+                                                                  name:
+                                                                    "e.printStackTrace",
+                                                                  id:
+                                                                    "1223679906",
+                                                                  type:
+                                                                    "REFERENCE_EXPRESSION",
+                                                                  value: 1,
+                                                                  children: [
+                                                                    {
+                                                                      name: "e",
+                                                                      id:
+                                                                        "766751542",
+                                                                      type:
+                                                                        "REFERENCE_EXPRESSION",
+                                                                      value: 1,
+                                                                    },
+                                                                  ],
+                                                                },
+                                                              ],
+                                                            },
+                                                          ],
+                                                        },
+                                                      ],
+                                                    },
+                                                    {
+                                                      name: "xx1",
+                                                      id: "1519087307",
+                                                      type: "LOCAL_VARIABLE",
+                                                      value: 1,
+                                                      children: [
+                                                        {
+                                                          name: "Cc",
+                                                          id: "967347707",
+                                                          type:
+                                                            "JAVA_CODE_REFERENCE",
+                                                          value: 1,
+                                                        },
+                                                        {
+                                                          name: "Cc",
+                                                          id: "1490718620",
+                                                          type:
+                                                            "JAVA_CODE_REFERENCE",
+                                                          value: 1,
+                                                        },
+                                                      ],
+                                                    },
+                                                    {
+                                                      name:
+                                                        "PsiReturnStatement",
+                                                      id: "373491706",
+                                                      type: "RETURN_STATEMENT",
+                                                      value: 1,
+                                                      children: [
+                                                        {
+                                                          name: "5",
+                                                          id: "1037657092",
+                                                          type:
+                                                            "LITERAL_EXPRESSION",
+                                                          value: 1,
+                                                        },
+                                                        {
+                                                          name: "return",
+                                                          id: "357970067",
+                                                          type:
+                                                            "RETURN_KEYWORD",
+                                                          value: 1,
+                                                        },
+                                                      ],
+                                                    },
+                                                  ],
+                                                },
+                                                {
+                                                  name: "qqweqw",
+                                                  id: "1498952359",
+                                                  type: "PARAMETER",
+                                                  value: 1,
+                                                  children: [
+                                                    {
+                                                      name: "String",
+                                                      id: "1652968952",
+                                                      type:
+                                                        "JAVA_CODE_REFERENCE",
+                                                      value: 1,
+                                                    },
+                                                  ],
+                                                },
+                                              ],
+                                            },
+                                            {
+                                              name: "main",
+                                              id: "1353679924",
+                                              type: "METHOD",
+                                              value: 1,
+                                              children: [
+                                                {
+                                                  name: "throws",
+                                                  id: "1988533836",
+                                                  type: "THROWS_KEYWORD",
+                                                  value: 1,
+                                                },
+                                                {
+                                                  name: "PsiCodeBlock",
+                                                  id: "438542537",
+                                                  type: "CODE_BLOCK",
+                                                  value: 1,
+                                                  children: [
+                                                    {
+                                                      name: "aa1",
+                                                      id: "985646358",
+                                                      type: "LOCAL_VARIABLE",
+                                                      value: 1,
+                                                      children: [
+                                                        {
+                                                          name: "aaa",
+                                                          id: "1082359799",
+                                                          type:
+                                                            "JAVA_CODE_REFERENCE",
+                                                          value: 1,
+                                                        },
+                                                        {
+                                                          name: "aaa",
+                                                          id: "2104682914",
+                                                          type:
+                                                            "JAVA_CODE_REFERENCE",
+                                                          value: 1,
+                                                        },
+                                                      ],
+                                                    },
+                                                    {
+                                                      name:
+                                                        "qweerwer = readFiles('ttttttt')",
+                                                      id: "1038126790",
+                                                      type:
+                                                        "ASSIGNMENT_EXPRESSION",
+                                                      value: 1,
+                                                      children: [
+                                                        {
+                                                          name: "qweerwer",
+                                                          id: "1131501133",
+                                                          type:
+                                                            "REFERENCE_EXPRESSION",
+                                                          value: 1,
+                                                        },
+                                                        {
+                                                          name:
+                                                            "readFiles('ttttttt')",
+                                                          id: "116110514",
+                                                          type:
+                                                            "METHOD_CALL_EXPRESSION",
+                                                          value: 1,
+                                                          children: [
+                                                            {
+                                                              name: "'ttttttt'",
+                                                              id: "857286743",
+                                                              type:
+                                                                "LITERAL_EXPRESSION",
+                                                              value: 1,
+                                                            },
+                                                            {
+                                                              name: "readFiles",
+                                                              id: "1088767344",
+                                                              type:
+                                                                "REFERENCE_EXPRESSION",
+                                                              value: 1,
+                                                            },
+                                                          ],
+                                                        },
+                                                      ],
+                                                    },
+                                                    {
+                                                      name: "aaa",
+                                                      id: "1891908514",
+                                                      type: "CLASS",
+                                                      value: 1,
+                                                      children: [
+                                                        {
+                                                          name: "aaa",
+                                                          id: "17346017",
+                                                          type: "METHOD",
+                                                          value: 1,
+                                                          children: [
+                                                            {
+                                                              name: "()",
+                                                              id: "1293719327",
+                                                              type:
+                                                                "PARAMETER_LIST",
+                                                              value: 1,
+                                                            },
+                                                            {
+                                                              name:
+                                                                "PsiCodeBlock",
+                                                              id: "1942550100",
+                                                              type:
+                                                                "CODE_BLOCK",
+                                                              value: 1,
+                                                            },
+                                                          ],
+                                                        },
+                                                        {
+                                                          name: "a",
+                                                          id: "11402770",
+                                                          type: "METHOD",
+                                                          value: 1,
+                                                          children: [
+                                                            {
+                                                              name: "void",
+                                                              id: "1905968075",
+                                                              type:
+                                                                "VOID_KEYWORD",
+                                                              value: 1,
+                                                            },
+                                                            {
+                                                              name:
+                                                                "PsiCodeBlock",
+                                                              id: "1993815824",
+                                                              type:
+                                                                "CODE_BLOCK",
+                                                              value: 1,
+                                                            },
+                                                            {
+                                                              name: "()",
+                                                              id: "1117328193",
+                                                              type:
+                                                                "PARAMETER_LIST",
+                                                              value: 1,
+                                                            },
+                                                          ],
+                                                        },
+                                                        {
+                                                          name: "propA",
+                                                          id: "427222893",
+                                                          type: "FIELD",
+                                                          value: 1,
+                                                        },
+                                                        {
+                                                          name: "b",
+                                                          id: "1780428739",
+                                                          type: "METHOD",
+                                                          value: 1,
+                                                          children: [
+                                                            {
+                                                              name: "()",
+                                                              id: "571456160",
+                                                              type:
+                                                                "PARAMETER_LIST",
+                                                              value: 1,
+                                                            },
+                                                            {
+                                                              name:
+                                                                "PsiCodeBlock",
+                                                              id: "404742306",
+                                                              type:
+                                                                "CODE_BLOCK",
+                                                              value: 1,
+                                                              children: [
+                                                                {
+                                                                  name: "a()",
+                                                                  id:
+                                                                    "1243900145",
+                                                                  type:
+                                                                    "METHOD_CALL_EXPRESSION",
+                                                                  value: 1,
+                                                                  children: [
+                                                                    {
+                                                                      name: "a",
+                                                                      id:
+                                                                        "522116446",
+                                                                      type:
+                                                                        "REFERENCE_EXPRESSION",
+                                                                      value: 1,
+                                                                    },
+                                                                  ],
+                                                                },
+                                                                {
+                                                                  name:
+                                                                    "readFiles()",
+                                                                  id:
+                                                                    "684187275",
+                                                                  type:
+                                                                    "METHOD_CALL_EXPRESSION",
+                                                                  value: 1,
+                                                                  children: [
+                                                                    {
+                                                                      name:
+                                                                        "readFiles",
+                                                                      id:
+                                                                        "1439726116",
+                                                                      type:
+                                                                        "REFERENCE_EXPRESSION",
+                                                                      value: 1,
+                                                                    },
+                                                                  ],
+                                                                },
+                                                              ],
+                                                            },
+                                                            {
+                                                              name: "void",
+                                                              id: "1769914921",
+                                                              type:
+                                                                "VOID_KEYWORD",
+                                                              value: 1,
+                                                            },
+                                                          ],
+                                                        },
+                                                      ],
+                                                    },
+                                                    {
+                                                      name: "qweerwer",
+                                                      id: "1485649599",
+                                                      type: "LOCAL_VARIABLE",
+                                                      value: 1,
+                                                      children: [
+                                                        {
+                                                          name: "1",
+                                                          id: "1999942271",
+                                                          type:
+                                                            "LITERAL_EXPRESSION",
+                                                          value: 1,
+                                                        },
+                                                      ],
+                                                    },
+                                                    {
+                                                      name: "req",
+                                                      id: "288242858",
+                                                      type: "LOCAL_VARIABLE",
+                                                      value: 1,
+                                                      children: [
+                                                        {
+                                                          name: "HttpGet",
+                                                          id: "1140428692",
+                                                          type:
+                                                            "JAVA_CODE_REFERENCE",
+                                                          value: 1,
+                                                        },
+                                                        {
+                                                          name:
+                                                            "new HttpGet('http",
+                                                          id: "924049944",
+                                                          type:
+                                                            "NEW_EXPRESSION",
+                                                          value: 1,
+                                                          children: [
+                                                            {
+                                                              name:
+                                                                "PsiExpressionList",
+                                                              id: "644149684",
+                                                              type:
+                                                                "EXPRESSION_LIST",
+                                                              value: 1,
+                                                              children: [
+                                                                {
+                                                                  name: "'http",
+                                                                  id:
+                                                                    "159179822",
+                                                                  type:
+                                                                    "LITERAL_EXPRESSION",
+                                                                  value: 1,
+                                                                },
+                                                                {
+                                                                  name:
+                                                                    "'pppppp'",
+                                                                  id:
+                                                                    "576789182",
+                                                                  type:
+                                                                    "LITERAL_EXPRESSION",
+                                                                  value: 1,
+                                                                },
+                                                              ],
+                                                            },
+                                                            {
+                                                              name: "HttpGet",
+                                                              id: "931903883",
+                                                              type:
+                                                                "JAVA_CODE_REFERENCE",
+                                                              value: 1,
+                                                            },
+                                                          ],
+                                                        },
+                                                      ],
+                                                    },
+                                                    {
+                                                      name: "response",
+                                                      id: "48003195",
+                                                      type: "LOCAL_VARIABLE",
+                                                      value: 1,
+                                                      children: [
+                                                        {
+                                                          name: "HttpResponse",
+                                                          id: "1963338679",
+                                                          type:
+                                                            "JAVA_CODE_REFERENCE",
+                                                          value: 1,
+                                                        },
+                                                        {
+                                                          name:
+                                                            "httpclient.execute(req)",
+                                                          id: "1188610410",
+                                                          type:
+                                                            "METHOD_CALL_EXPRESSION",
+                                                          value: 1,
+                                                          children: [
+                                                            {
+                                                              name:
+                                                                "httpclient",
+                                                              id: "1187549011",
+                                                              type:
+                                                                "REFERENCE_EXPRESSION",
+                                                              value: 1,
+                                                            },
+                                                            {
+                                                              name: "req",
+                                                              id: "1976851560",
+                                                              type:
+                                                                "REFERENCE_EXPRESSION",
+                                                              value: 1,
+                                                            },
+                                                          ],
+                                                        },
+                                                      ],
+                                                    },
+                                                    {
+                                                      name:
+                                                        "System.out.println('Hello World!')",
+                                                      id: "1340327279",
+                                                      type:
+                                                        "METHOD_CALL_EXPRESSION",
+                                                      value: 1,
+                                                      children: [
+                                                        {
+                                                          name: "System.out",
+                                                          id: "902510020",
+                                                          type:
+                                                            "REFERENCE_EXPRESSION",
+                                                          value: 1,
+                                                          children: [
+                                                            {
+                                                              name: "System",
+                                                              id: "94973250",
+                                                              type:
+                                                                "REFERENCE_EXPRESSION",
+                                                              value: 1,
+                                                            },
+                                                          ],
+                                                        },
+                                                        {
+                                                          name:
+                                                            "'Hello World!'",
+                                                          id: "922845961",
+                                                          type:
+                                                            "LITERAL_EXPRESSION",
+                                                          value: 1,
+                                                        },
+                                                      ],
+                                                    },
+                                                    {
+                                                      name:
+                                                        "System.loadLibrary('')",
+                                                      id: "193146659",
+                                                      type:
+                                                        "METHOD_CALL_EXPRESSION",
+                                                      value: 1,
+                                                      children: [
+                                                        {
+                                                          name: "System",
+                                                          id: "1882643604",
+                                                          type:
+                                                            "REFERENCE_EXPRESSION",
+                                                          value: 1,
+                                                        },
+                                                        {
+                                                          name: "''",
+                                                          id: "1428167347",
+                                                          type:
+                                                            "LITERAL_EXPRESSION",
+                                                          value: 1,
+                                                        },
+                                                      ],
+                                                    },
+                                                    {
+                                                      name: "body = 'asdasda'",
+                                                      id: "1150564080",
+                                                      type:
+                                                        "ASSIGNMENT_EXPRESSION",
+                                                      value: 1,
+                                                      children: [
+                                                        {
+                                                          name: "'asdasda'",
+                                                          id: "580174108",
+                                                          type:
+                                                            "LITERAL_EXPRESSION",
+                                                          value: 1,
+                                                        },
+                                                        {
+                                                          name: "body",
+                                                          id: "793167118",
+                                                          type:
+                                                            "REFERENCE_EXPRESSION",
+                                                          value: 1,
+                                                        },
+                                                      ],
+                                                    },
+                                                    {
+                                                      name: "httpclient",
+                                                      id: "2124152837",
+                                                      type: "LOCAL_VARIABLE",
+                                                      value: 1,
+                                                      children: [
+                                                        {
+                                                          name: "HttpClient",
+                                                          id: "1579019242",
+                                                          type:
+                                                            "JAVA_CODE_REFERENCE",
+                                                          value: 1,
+                                                        },
+                                                        {
+                                                          name:
+                                                            "DefaultHttpClient",
+                                                          id: "1856461932",
+                                                          type:
+                                                            "JAVA_CODE_REFERENCE",
+                                                          value: 1,
+                                                        },
+                                                      ],
+                                                    },
+                                                    {
+                                                      name: "body",
+                                                      id: "1183816259",
+                                                      type: "LOCAL_VARIABLE",
+                                                      value: 1,
+                                                      children: [
+                                                        {
+                                                          name:
+                                                            "EntityUtils.toString(((org.apache.http.HttpResponse) response).getEntity())",
+                                                          id: "961030909",
+                                                          type:
+                                                            "METHOD_CALL_EXPRESSION",
+                                                          value: 1,
+                                                          children: [
+                                                            {
+                                                              name:
+                                                                "((org.apache.http.HttpResponse) response).getEntity()",
+                                                              id: "2082330169",
+                                                              type:
+                                                                "METHOD_CALL_EXPRESSION",
+                                                              value: 1,
+                                                              children: [
+                                                                {
+                                                                  name:
+                                                                    "((org.apache.http.HttpResponse) response)",
+                                                                  id:
+                                                                    "114373027",
+                                                                  type:
+                                                                    "PARENTH_EXPRESSION",
+                                                                  value: 1,
+                                                                  children: [
+                                                                    {
+                                                                      name:
+                                                                        "(org.apache.http.HttpResponse) response",
+                                                                      id:
+                                                                        "757390359",
+                                                                      type:
+                                                                        "TYPE_CAST_EXPRESSION",
+                                                                      value: 1,
+                                                                      children: [
+                                                                        {
+                                                                          name:
+                                                                            "response",
+                                                                          id:
+                                                                            "535512111",
+                                                                          type:
+                                                                            "REFERENCE_EXPRESSION",
+                                                                          value: 1,
+                                                                        },
+                                                                        {
+                                                                          name:
+                                                                            "org.apache.http",
+                                                                          id:
+                                                                            "1901600016",
+                                                                          type:
+                                                                            "JAVA_CODE_REFERENCE",
+                                                                          value: 1,
+                                                                          children: [
+                                                                            {
+                                                                              name:
+                                                                                "org",
+                                                                              id:
+                                                                                "631485142",
+                                                                              type:
+                                                                                "JAVA_CODE_REFERENCE",
+                                                                              value: 1,
+                                                                            },
+                                                                          ],
+                                                                        },
+                                                                      ],
+                                                                    },
+                                                                  ],
+                                                                },
+                                                              ],
+                                                            },
+                                                            {
+                                                              name:
+                                                                "EntityUtils",
+                                                              id: "537241810",
+                                                              type:
+                                                                "REFERENCE_EXPRESSION",
+                                                              value: 1,
+                                                            },
+                                                          ],
+                                                        },
+                                                        {
+                                                          name: "String",
+                                                          id: "1447334080",
+                                                          type:
+                                                            "JAVA_CODE_REFERENCE",
+                                                          value: 1,
+                                                        },
+                                                      ],
+                                                    },
+                                                    {
+                                                      name: "qweerwer = 5675",
+                                                      id: "123115356",
+                                                      type:
+                                                        "ASSIGNMENT_EXPRESSION",
+                                                      value: 1,
+                                                      children: [
+                                                        {
+                                                          name: "qweerwer",
+                                                          id: "1631260394",
+                                                          type:
+                                                            "REFERENCE_EXPRESSION",
+                                                          value: 1,
+                                                        },
+                                                        {
+                                                          name: "5675",
+                                                          id: "419919139",
+                                                          type:
+                                                            "LITERAL_EXPRESSION",
+                                                          value: 1,
+                                                        },
+                                                      ],
+                                                    },
+                                                    {
+                                                      name: "PsiIfStatement",
+                                                      id: "653314139",
+                                                      type: "IF_STATEMENT",
+                                                      value: 1,
+                                                      children: [
+                                                        {
+                                                          name: "true==true",
+                                                          id: "365968875",
+                                                          type:
+                                                            "BINARY_EXPRESSION",
+                                                          value: 1,
+                                                          children: [
+                                                            {
+                                                              name: "true",
+                                                              id: "1281498189",
+                                                              type:
+                                                                "LITERAL_EXPRESSION",
+                                                              value: 1,
+                                                            },
+                                                            {
+                                                              name: "EQEQ",
+                                                              id: "1140930549",
+                                                              type: "EQEQ",
+                                                              value: 1,
+                                                            },
+                                                            {
+                                                              name: "true",
+                                                              id: "1149102438",
+                                                              type:
+                                                                "LITERAL_EXPRESSION",
+                                                              value: 1,
+                                                            },
+                                                          ],
+                                                        },
+                                                        {
+                                                          name: "PsiCodeBlock",
+                                                          id: "903112687",
+                                                          type: "CODE_BLOCK",
+                                                          value: 1,
+                                                          children: [
+                                                            {
+                                                              name:
+                                                                "System.out.println('qeqqwq')",
+                                                              id: "1467905900",
+                                                              type:
+                                                                "METHOD_CALL_EXPRESSION",
+                                                              value: 1,
+                                                              children: [
+                                                                {
+                                                                  name:
+                                                                    "'qeqqwq'",
+                                                                  id:
+                                                                    "950475348",
+                                                                  type:
+                                                                    "LITERAL_EXPRESSION",
+                                                                  value: 1,
+                                                                },
+                                                                {
+                                                                  name:
+                                                                    "System.out",
+                                                                  id:
+                                                                    "83587029",
+                                                                  type:
+                                                                    "REFERENCE_EXPRESSION",
+                                                                  value: 1,
+                                                                  children: [
+                                                                    {
+                                                                      name:
+                                                                        "System",
+                                                                      id:
+                                                                        "1929439990",
+                                                                      type:
+                                                                        "REFERENCE_EXPRESSION",
+                                                                      value: 1,
+                                                                    },
+                                                                  ],
+                                                                },
+                                                              ],
+                                                            },
+                                                          ],
+                                                        },
+                                                        {
+                                                          name: "if",
+                                                          id: "1565664588",
+                                                          type: "IF_KEYWORD",
+                                                          value: 1,
+                                                        },
+                                                      ],
+                                                    },
+                                                  ],
+                                                },
+                                                {
+                                                  name: "public",
+                                                  id: "2122470716",
+                                                  type: "PUBLIC_KEYWORD",
+                                                  value: 1,
+                                                },
+                                                {
+                                                  name: "void",
+                                                  id: "1100890460",
+                                                  type: "VOID_KEYWORD",
+                                                  value: 1,
+                                                },
+                                                {
+                                                  name: "IOException",
+                                                  id: "1044388476",
+                                                  type: "JAVA_CODE_REFERENCE",
+                                                  value: 1,
+                                                },
+                                                {
+                                                  name: "args",
+                                                  id: "1695823219",
+                                                  type: "PARAMETER",
+                                                  value: 1,
+                                                  children: [
+                                                    {
+                                                      name: "RBRACKET",
+                                                      id: "1545104127",
+                                                      type: "RBRACKET",
+                                                      value: 1,
+                                                    },
+                                                    {
+                                                      name: "LBRACKET",
+                                                      id: "1315898559",
+                                                      type: "LBRACKET",
+                                                      value: 1,
+                                                    },
+                                                    {
+                                                      name: "String",
+                                                      id: "901350567",
+                                                      type:
+                                                        "JAVA_CODE_REFERENCE",
+                                                      value: 1,
+                                                    },
+                                                  ],
+                                                },
+                                              ],
+                                            },
+                                            {
+                                              name: "public",
+                                              id: "2085787833",
+                                              type: "PUBLIC_KEYWORD",
+                                              value: 1,
+                                            },
+                                          ],
+                                        },
+                                      ],
+                                    },
+                                  ],
+                                },
+                              ],
+                            },
+                            {
+                              name:
+                                "/home/phantomv/Desktop/experimental/java_basic_io/basicIO/src/test/java",
+                              id: "701956277",
+                              type: "null",
+                              value: 1,
+                              children: [
+                                {
+                                  name:
+                                    "/home/phantomv/Desktop/experimental/java_basic_io/basicIO/src/test/java/com/example1",
+                                  id: "1300145963",
+                                  type: "null",
+                                  value: 1,
+                                  children: [
+                                    {
+                                      name: "AppTest.java",
+                                      id: "1563282610",
+                                      type: "java.FILE",
+                                      value: 1,
+                                      children: [
+                                        {
+                                          name: "AppTest",
+                                          id: "1548526654",
+                                          type: "CLASS",
+                                          value: 1,
+                                          children: [
+                                            {
+                                              name: "shouldAnswerWithTrue",
+                                              id: "1456518644",
+                                              type: "METHOD",
+                                              value: 1,
+                                              children: [
+                                                {
+                                                  name: "()",
+                                                  id: "1937960279",
+                                                  type: "PARAMETER_LIST",
+                                                  value: 1,
+                                                },
+                                                {
+                                                  name:
+                                                    "PsiExpressionStatement",
+                                                  id: "1949570305",
+                                                  type: "EXPRESSION_STATEMENT",
+                                                  value: 1,
+                                                  children: [
+                                                    {
+                                                      name:
+                                                        "assertTrue( true )",
+                                                      id: "1306105823",
+                                                      type:
+                                                        "METHOD_CALL_EXPRESSION",
+                                                      value: 1,
+                                                      children: [
+                                                        {
+                                                          name: "true",
+                                                          id: "1189090600",
+                                                          type:
+                                                            "LITERAL_EXPRESSION",
+                                                          value: 1,
+                                                        },
+                                                        {
+                                                          name: "assertTrue",
+                                                          id: "1158403324",
+                                                          type:
+                                                            "REFERENCE_EXPRESSION",
+                                                          value: 1,
+                                                        },
+                                                      ],
+                                                    },
+                                                  ],
+                                                },
+                                                {
+                                                  name: "PsiAnnotation",
+                                                  id: "975643627",
+                                                  type: "ANNOTATION",
+                                                  value: 1,
+                                                  children: [
+                                                    {
+                                                      name: "AT",
+                                                      id: "25833584",
+                                                      type: "AT",
+                                                      value: 1,
+                                                    },
+                                                    {
+                                                      name: "Test",
+                                                      id: "527922316",
+                                                      type:
+                                                        "JAVA_CODE_REFERENCE",
+                                                      value: 1,
+                                                    },
+                                                    {
+                                                      name:
+                                                        "PsiAnnotationParameterList",
+                                                      id: "1748894987",
+                                                      type:
+                                                        "ANNOTATION_PARAMETER_LIST",
+                                                      value: 1,
+                                                    },
+                                                  ],
+                                                },
+                                                {
+                                                  name: "public",
+                                                  id: "2074797613",
+                                                  type: "PUBLIC_KEYWORD",
+                                                  value: 1,
+                                                },
+                                                {
+                                                  name: "void",
+                                                  id: "286806133",
+                                                  type: "VOID_KEYWORD",
+                                                  value: 1,
+                                                },
+                                              ],
+                                            },
+                                            {
+                                              name: "public",
+                                              id: "1711343162",
+                                              type: "PUBLIC_KEYWORD",
+                                              value: 1,
+                                            },
+                                          ],
+                                        },
+                                        {
+                                          name: "com.example1",
+                                          id: "1037852003",
+                                          type: "JAVA_CODE_REFERENCE",
+                                          value: 1,
+                                          children: [
+                                            {
+                                              name: "com",
+                                              id: "822400962",
+                                              type: "JAVA_CODE_REFERENCE",
+                                              value: 1,
+                                            },
+                                          ],
+                                        },
+                                      ],
+                                    },
+                                  ],
+                                },
+                              ],
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name:
+            "/home/phantomv/.m2/repository/org/apache/httpcomponents/httpclient/4.0.2/httpclient-4.0.2.jar",
+          id: "1264345680",
+          type: "null",
+          value: 1,
+          children: [
+            {
+              name:
+                "/home/phantomv/.m2/repository/org/apache/httpcomponents/httpclient/4.0.2/httpclient-4.0.2.jar!/org/apache",
+              id: "465074291",
+              type: "null",
+              value: 1,
+              children: [
+                {
+                  name:
+                    "/home/phantomv/.m2/repository/org/apache/httpcomponents/httpclient/4.0.2/httpclient-4.0.2.jar!/org/apache/http",
+                  id: "2114301622",
+                  type: "null",
+                  value: 1,
+                  children: [
+                    {
+                      name:
+                        "/home/phantomv/.m2/repository/org/apache/httpcomponents/httpclient/4.0.2/httpclient-4.0.2.jar!/org/apache/http/client",
+                      id: "1341546009",
+                      type: "null",
+                      value: 1,
+                      children: [
+                        {
+                          name: "HttpClient",
+                          id: "1150711165",
+                          type: "CLASS",
+                          value: 1,
+                          children: [
+                            {
+                              name: "execute",
+                              id: "1553177760",
+                              type: "METHOD",
+                              value: 1,
+                            },
+                          ],
+                        },
+                        {
+                          name: "HttpGet.class",
+                          id: "439835651",
+                          type: "null",
+                          value: 1,
+                          children: [
+                            {
+                              name: "HttpGet",
+                              id: "1452199892",
+                              type: "CLASS",
+                              value: 1,
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    {
+                      name:
+                        "/home/phantomv/.m2/repository/org/apache/httpcomponents/httpclient/4.0.2/httpclient-4.0.2.jar!/org/apache/http/impl/client",
+                      id: "1919698151",
+                      type: "null",
+                      value: 1,
+                      children: [
+                        {
+                          name: "DefaultHttpClient",
+                          id: "139479460",
+                          type: "CLASS",
+                          value: 1,
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name:
+            "/home/phantomv/.m2/repository/org/apache/httpcomponents/httpcore/4.0.1/httpcore-4.0.1.jar",
+          id: "1205599439",
+          type: "null",
+          value: 1,
+          children: [
+            {
+              name:
+                "/home/phantomv/.m2/repository/org/apache/httpcomponents/httpcore/4.0.1/httpcore-4.0.1.jar!/org/apache",
+              id: "1016354039",
+              type: "null",
+              value: 1,
+              children: [
+                {
+                  name:
+                    "/home/phantomv/.m2/repository/org/apache/httpcomponents/httpcore/4.0.1/httpcore-4.0.1.jar!/org/apache/http",
+                  id: "2014020562",
+                  type: "null",
+                  value: 1,
+                  children: [
+                    {
+                      name: "EntityUtils.class",
+                      id: "2008770209",
+                      type: "null",
+                      value: 1,
+                      children: [
+                        {
+                          name: "toString",
+                          id: "107810208",
+                          type: "METHOD",
+                          value: 1,
+                        },
+                      ],
+                    },
+                    {
+                      name: "HttpResponse",
+                      id: "1003957130",
+                      type: "CLASS",
+                      value: 1,
+                      children: [
+                        {
+                          name: "getEntity",
+                          id: "1388053111",
+                          type: "METHOD",
+                          value: 1,
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          name: "/home/phantomv/.m2/repository/junit/junit/4.11/junit-4.11.jar",
+          id: "737774785",
+          type: "null",
+          value: 1,
+          children: [
+            {
+              name:
+                "/home/phantomv/.m2/repository/junit/junit/4.11/junit-4.11.jar!/org/junit",
+              id: "959716854",
+              type: "null",
+              value: 1,
+              children: [
+                {
+                  name: "Test",
+                  id: "692148919",
+                  type: "CLASS",
+                  value: 1,
+                },
+                {
+                  name: "Assert",
+                  id: "154692955",
+                  type: "CLASS",
+                  value: 1,
+                  children: [
+                    {
+                      name: "assertTrue",
+                      id: "1195504465",
+                      type: "METHOD",
+                      value: 1,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+    let color = d3.scaleSequential([10, 0], d3.interpolatePuBu);
+    format = d3.format(",d");
+    height = 2000;
+    width = 3800;
+    treemap = (data) =>
+      d3
+        .treemap()
+        .size([width, height])
+        .paddingOuter(5)
+        .paddingTop(13)
+        .paddingInner(5)
+        .round(true)(d3.hierarchy(data).sum((d) => d.value));
+    const root = treemap(data);
+
+    console.log(root);
+
+    var canvas = document.getElementById("canvas");
+    if (canvas.getContext) {
+      var ctx = canvas.getContext("2d");
+
+      function f1(n) {
+        ctx.fillStyle =
+          n.children != undefined
+            ? "rgba(80, 80, 255,0.1)"
+            : "rgba(80, 100, 233, 1)";
+        ctx.fillStyle =
+          n.data.type == "LITERAL_EXPRESSION"
+            ? "rgba(130, 180, 180, 1)"
+            : ctx.fillStyle;
+        ctx.fillRect(n.x0, n.y0, n.x1 - n.x0, n.y1 - n.y0);
+        if (n.children != undefined) n.children.forEach((x) => f1(x));
+      }
+      f1(root);
+
+    }
+  </script>
+</html>
