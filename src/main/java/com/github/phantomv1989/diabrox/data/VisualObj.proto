@@ -1,0 +1,21 @@
+// [START declaration]
+syntax = "proto2";
+
+package com.github.phantomv1989.diabrox.data;
+// compile with
+// $ protoc --java_out=../../../../../ ./VisualObj.proto
+
+// [START java_declaration]
+option java_package = "com.github.phantomv1989.diabrox.data";
+option java_outer_classname = "VisualObj";
+// [END java_declaration]
+
+
+// [START messages]
+message VisualNode {
+  required string name = 1;
+  required int32 id = 2;
+  required int32 value = 3;
+  required int32 type = 4;
+  repeated VisualNode children = 5;
+}

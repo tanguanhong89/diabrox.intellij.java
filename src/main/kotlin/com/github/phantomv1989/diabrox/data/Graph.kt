@@ -1,4 +1,4 @@
-package com.github.phantomv1989.diabrox.actions
+package com.github.phantomv1989.diabrox.data
 
 import com.intellij.psi.PsiElement
 
@@ -9,10 +9,10 @@ class GraphLink(target: GraphNode, type: String, outbound: Boolean, value: Int?)
     val outbound = outbound
 }
 
-open class GraphNode(name: String, id: String, type: String, ele: PsiElement?, value: Int = 1) {
-    val name: String = name
+open class GraphNode(name: String, id: Int, type: String, ele: PsiElement?, value: Int = 1) {
+    var name: String = name
     var value: Int = value
-    val id: String = id
+    val id: Int = id
     val type: String = type
     val ele: PsiElement? = ele
     var links: HashMap<Int, GraphLink> = HashMap()
@@ -61,7 +61,6 @@ open class GraphNode(name: String, id: String, type: String, ele: PsiElement?, v
         var r1 = findLinks(linkTypes)
         var r: ArrayList<GraphLink> = ArrayList()
         for (l in r1) {
-
             if (l.outbound && outboundDirection) r.add(l)
             else if (!l.outbound && !outboundDirection) {
                 r.add(l)
@@ -73,8 +72,8 @@ open class GraphNode(name: String, id: String, type: String, ele: PsiElement?, v
 
 class Graph(links: Set<String>) {
     val ForLinks: Set<String> = links
-    var heads: HashMap<String, GraphNode> = HashMap()
-    var IdIndex: HashMap<String, GraphNode> = HashMap()
+    var heads: HashMap<Int, GraphNode> = HashMap()
+    var IdIndex: HashMap<Int, GraphNode> = HashMap()
     var maxDepth = 0
     var totalValueOfTerminalNodes = 0
     var totalCountOfTerminalNodes = 0
@@ -119,7 +118,7 @@ class Graph(links: Set<String>) {
 //        calculateTerminalNodesTotalSizeAndCount()
     }
 
-    fun calculateHeads(): HashMap<String, GraphNode> {
+    fun calculateHeads(): HashMap<Int, GraphNode> {
         for (l in IdIndex.keys) {
             if (IdIndex.get(l)!!.findLinksWithDirection(ForLinks, false).size == 0)
                 heads[l] = IdIndex[l]!!
@@ -171,7 +170,7 @@ class Graph(links: Set<String>) {
         return maxDepth
     }
 
-    fun getId(id: String): GraphNode? {
+    fun getId(id: Int): GraphNode? {
         return IdIndex.get(id)
     }
 }

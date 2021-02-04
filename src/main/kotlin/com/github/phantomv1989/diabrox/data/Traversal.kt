@@ -1,4 +1,4 @@
-package com.github.phantomv1989.diabrox.actions
+package com.github.phantomv1989.diabrox.data
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType

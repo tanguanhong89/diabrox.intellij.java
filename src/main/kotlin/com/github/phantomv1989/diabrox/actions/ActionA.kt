@@ -1,12 +1,13 @@
 package com.github.phantomv1989.diabrox.actions
 
-import com.intellij.ide.util.PropertiesComponent
+import com.github.phantomv1989.diabrox.data.Indexer
+import com.github.phantomv1989.diabrox.data.Traversal
+import com.github.phantomv1989.diabrox.data.VisualObj
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiManager
 import org.jetbrains.annotations.NotNull
 
@@ -24,9 +25,9 @@ internal class ActionA : AnAction() {
             e.project?.let { it1 -> traverseSourceRoots(it, it1, myIndex) }
         }
         myIndex.computeGraphs()
-        var r = myIndex.toJsonStringNodes()
         //var r1 = myIndex.toJsonStringLinks()
         myIndex.StructureGraph.collapseGraph()
+       myIndex.toCompressedOutput()
     }
 
 

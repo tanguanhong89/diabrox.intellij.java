@@ -1,8 +1,8 @@
-package com.github.phantomv1989.diabrox.actions
+package com.github.phantomv1989.diabrox.data
 
-import com.github.phantomv1989.diabrox.actions.Traversal.Companion.checkIsInvalidExpressionList
-import com.github.phantomv1989.diabrox.actions.Traversal.Companion.isSkippable
-import com.github.phantomv1989.diabrox.actions.Traversal.Companion.isStubIgnored
+import com.github.phantomv1989.diabrox.data.Traversal.Companion.checkIsInvalidExpressionList
+import com.github.phantomv1989.diabrox.data.Traversal.Companion.isSkippable
+import com.github.phantomv1989.diabrox.data.Traversal.Companion.isStubIgnored
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
@@ -10,6 +10,23 @@ import com.intellij.psi.util.elementType
 
 
 class Indexer {
+    var typeLookup: HashMap<Int, String> = HashMap() //doubly linked map
+    var _typeLookup: HashMap<String, Int> = HashMap()
+
+    var ignoredNames: Set<String> = mutableSetOf(
+        "PsiExpressionStatement",
+        "PsiExpressionList",
+        "PsiDeclarationStatement",
+        "PsiCodeBlock",
+        "PsiIfStatement",
+        "PsiBlockStatement",
+        "PsiCatchSection",
+        "PsiReturnStatement",
+        "PsiAnnotation",
+        "PsiTryStatement",
+        "PsiWhileStatement",
+    )
+
     var StructureGraph = Graph(
         mutableSetOf(
             "parent",
@@ -26,6 +43,14 @@ class Indexer {
         )
     )
 
+    fun addOrGetTypeId(s: String): Int {
+        if (!_typeLookup.containsKey(s)) {
+            typeLookup[_typeLookup.size] = s
+            _typeLookup[s] = _typeLookup.size
+        }
+        return _typeLookup[s]!!
+    }
+
     fun psiToNode(ele: PsiElement, value: Int = 1): GraphNode {
         val s1 = ele.toString().split(":")
         var s2 = s1[0]
@@ -33,12 +58,13 @@ class Indexer {
             s2 = s1[1]
         }
         s2 = s2.replace("\"", "'").replace("\n", "\\n")
-
-        return GraphNode(s2, getHash(ele), ele.elementType.toString(), ele, value)
+        if (s2 in ignoredNames) return GraphNode("", getHash(ele).toInt(), ele.elementType.toString(), ele, value)
+        if (s2.length > 50) s2 = s2.substring(0, 50)
+        return GraphNode(s2, getHash(ele).toInt(), ele.elementType.toString(), ele, value)
     }
 
-    fun getHash(ele: PsiElement): String {
-        return System.identityHashCode(ele).toString()
+    fun getHash(ele: PsiElement): Int {
+        return System.identityHashCode(ele)
     }
 
 //    fun getNodesJsonString(): String {
@@ -85,12 +111,10 @@ class Indexer {
             } else {
                 psiToNode(ele)
             }
-            if (lastExistingParent != null) {
-                if (ele is PsiFile) {
-                    offsetKey = lastExistingParent.findLinks(mutableSetOf("child")).size
-                }
-                lastExistingParent.addLink(nodeObj, "child", offsetKey)
+            if (ele is PsiDirectory && ele.parent != null) {
+                nodeObj.name = "/" + nodeObj.name.split("/").last()
             }
+            lastExistingParent?.addLink(nodeObj, "child", offsetKey)
             StructureGraph.addNode(nodeObj)
             return nodeObj
         }
@@ -107,6 +131,27 @@ class Indexer {
         //DataGraph.calculateHeads()
     }
 
+    fun toVisualObjProtobuf(): VisualObj.VisualNode {
+        fun foo(n: GraphNode): VisualObj.VisualNode {
+            var r = VisualObj.VisualNode.newBuilder()
+                .setName(n.name)
+                .setId(n.id)
+                .setType(addOrGetTypeId(n.type))
+                .setValue(n.value)
+
+            r.addAllChildren(n.findLinksWithDirection(StructureGraph.ForLinks, true)
+                .map { x -> foo(x.target) })
+            return r.build()
+        }
+
+        var r = VisualObj.VisualNode.newBuilder()
+            .setName("root")
+            .setId(-1)
+            .setType(addOrGetTypeId("root"))
+            .setValue(0)
+        r.addAllChildren(StructureGraph.heads.values.map { x -> foo(x) })
+        return r.build()
+    }
 
     fun toJsonStringNodes(): String {
         fun foo(n: GraphNode): String {
@@ -121,6 +166,7 @@ class Indexer {
             }
             return "{" + r.joinToString(",") + "}"
         }
+
         var r1 = ArrayList<String>()
         r1.add("\"name\":\"root\"")
         r1.add("\"id\":\"0\"")
@@ -143,5 +189,17 @@ class Indexer {
             }
         }
         return "[" + r.joinToString(",") + "]"
+    }
+
+    fun toCompressedOutput() {
+        var protobufStr = toVisualObjProtobuf().toByteArray().contentToString()
+        var typeLKArr = ArrayList<String>()
+
+        for (k in typeLookup) {
+            typeLKArr.add(k.key.toString() + ":\"" + k.value + "\"")
+        }
+        var typeLookupSerialized = "{" + typeLKArr.joinToString(",") + "}"
+        println(protobufStr)
+        println(typeLookupSerialized)
     }
 }

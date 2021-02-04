@@ -43,8 +43,9 @@ repositories {
 }
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.15.0")
-    implementation ("com.google.code.gson:gson:2.8.5")
+    implementation ("com.google.protobuf:protobuf-java:3.11.0")
 }
+
 
 // Configure gradle-intellij-plugin plugin.
 // Read more: https://github.com/JetBrains/gradle-intellij-plugin
