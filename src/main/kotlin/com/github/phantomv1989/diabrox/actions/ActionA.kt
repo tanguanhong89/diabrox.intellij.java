@@ -2,7 +2,6 @@ package com.github.phantomv1989.diabrox.actions
 
 import com.github.phantomv1989.diabrox.data.Indexer
 import com.github.phantomv1989.diabrox.data.Traversal
-import com.github.phantomv1989.diabrox.data.VisualObj
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.Project
@@ -24,10 +23,13 @@ internal class ActionA : AnAction() {
         x?.let {
             e.project?.let { it1 -> traverseSourceRoots(it, it1, myIndex) }
         }
-        myIndex.computeGraphs()
+
         //var r1 = myIndex.toJsonStringLinks()
         myIndex.StructureGraph.collapseGraph()
-       myIndex.toCompressedOutput()
+        myIndex.computeGraphs()
+        myIndex.toJsonStringDataflow1();
+        myIndex.toJsonStringLinks();
+        myIndex.toJsonStringNodes(true);
     }
 
 

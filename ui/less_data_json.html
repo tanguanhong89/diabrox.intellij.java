@@ -1,0 +1,112 @@
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <style>
+      body {
+        margin: 0;
+      }
+    </style>
+    <style type="text/css">
+      .force-graph-container .graph-tooltip {
+        position: absolute;
+        transform: translate(-50%, 25px);
+        font-family: sans-serif;
+        font-size: 16px;
+        padding: 4px;
+        border-radius: 3px;
+        color: #eee;
+        background: rgba(0, 0, 0, 0.65);
+        visibility: hidden; /* by default */
+      }
+    </style>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src=" https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="http://cdn.rawgit.com/dcodeIO/protobuf.js/6.8.8/dist/protobuf.min.js"></script>
+  </head>
+
+  <body>
+    <canvas id="canvas" width="3800" height="2000" style="position: absolute;"></canvas>
+    <svg id="svg" width="3800" height="2000" style="position: absolute;font: 10px sans-serif;fill-opacity: 0;"></svg>
+  </body>
+  <script>
+    let pos = {};
+    function uncompress(d){
+      if (d.c==undefined){return}
+      _c = d.c;
+      d.children=_c;
+      delete d.c
+      _c.forEach(x=>uncompress(x))
+    }
+      let data =  {"n":"root","i":"0","t":0,"v":1,"c":[{"n":"/","i":"2","t":"null","v":1},{"n":"/","i":"4","t":"null","v":1},{"n":"BufferedReader.class","i":"260","t":"null","v":1},{"n":"/java_basic_io","i":"7","t":"null","v":1},{"n":"","i":"263","t":"EXPRESSION_LIST","v":1},{"n":"/Desktop","i":"9","t":"null","v":1},{"n":"/home","i":"11","t":"null","v":1},{"n":"FileReader.class","i":"267","t":"null","v":1},{"n":"/","i":"12","t":"null","v":1,"c":[{"n":"/phantomv","i":"10","t":"null","v":1,"c":[{"n":"/experimental","i":"8","t":"null","v":1,"c":[{"n":"/","i":"6","t":"null","v":1,"c":[{"n":"/","i":"5","t":"null","v":1,"c":[{"n":"/","i":"3","t":"null","v":1,"c":[{"n":"/","i":"1","t":"null","v":1,"c":[{"n":"App.java","i":"0","t":"java.FILE","v":1,"c":[{"n":"com.example1","i":"14","t":"JAVA_CODE_REFERENCE","v":1,"c":[{"n":"com","i":"15","t":"JAVA_CODE_REFERENCE","v":1}]},{"n":"App","i":"35","t":"CLASS","v":1,"c":[{"n":"main","i":"40","t":"METHOD","v":1,"c":[{"n":"","i":"62","t":"CODE_BLOCK","v":1,"c":[{"n":"httpclient","i":"137","t":"LOCAL_VARIABLE","v":1,"c":[{"n":"HttpClient","i":"140","t":"JAVA_CODE_REFERENCE","v":1},{"n":"DefaultHttpClient","i":"149","t":"JAVA_CODE_REFERENCE","v":1}]},{"n":"System.loadLibrary('')","i":"130","t":"METHOD_CALL_EXPRESSION","v":1,"c":[{"n":"System","i":"133","t":"REFERENCE_EXPRESSION","v":1},{"n":"''","i":"135","t":"LITERAL_EXPRESSION","v":5}]},{"n":"System.out.println('Hello World!')","i":"231","t":"METHOD_CALL_EXPRESSION","v":1,"c":[{"n":"'Hello World!'","i":"236","t":"LITERAL_EXPRESSION","v":5},{"n":"System.out","i":"233","t":"REFERENCE_EXPRESSION","v":1,"c":[{"n":"System","i":"234","t":"REFERENCE_EXPRESSION","v":1}]}]},{"n":"response","i":"169","t":"LOCAL_VARIABLE","v":1,"c":[{"n":"HttpResponse","i":"172","t":"JAVA_CODE_REFERENCE","v":1},{"n":"httpclient.execute(req)","i":"179","t":"METHOD_CALL_EXPRESSION","v":1,"c":[{"n":"req","i":"184","t":"REFERENCE_EXPRESSION","v":1},{"n":"httpclient","i":"182","t":"REFERENCE_EXPRESSION","v":1}]}]},{"n":"body","i":"186","t":"LOCAL_VARIABLE","v":1,"c":[{"n":"EntityUtils.toString(((org.apache.http.HttpRespons","i":"190","t":"METHOD_CALL_EXPRESSION","v":1,"c":[{"n":"((org.apache.http.HttpResponse) response).getEntit","i":"198","t":"METHOD_CALL_EXPRESSION","v":1,"c":[{"n":"((org.apache.http.HttpResponse) response)","i":"201","t":"PARENTH_EXPRESSION","v":1,"c":[{"n":"(org.apache.http.HttpResponse) response","i":"202","t":"TYPE_CAST_EXPRESSION","v":1,"c":[{"n":"response","i":"208","t":"REFERENCE_EXPRESSION","v":1},{"n":"org.apache.http","i":"205","t":"JAVA_CODE_REFERENCE","v":1,"c":[{"n":"org","i":"207","t":"JAVA_CODE_REFERENCE","v":1}]}]}]}]},{"n":"EntityUtils","i":"196","t":"REFERENCE_EXPRESSION","v":1}]},{"n":"String","i":"189","t":"JAVA_CODE_REFERENCE","v":1}]},{"n":"qweerwer = readFiles('ttttttt')","i":"224","t":"ASSIGNMENT_EXPRESSION","v":1,"c":[{"n":"qweerwer","i":"225","t":"REFERENCE_EXPRESSION","v":1},{"n":"readFiles('ttttttt')","i":"226","t":"METHOD_CALL_EXPRESSION","v":1,"c":[{"n":"readFiles","i":"227","t":"REFERENCE_EXPRESSION","v":1},{"n":"'ttttttt'","i":"229","t":"LITERAL_EXPRESSION","v":5}]}]},{"n":"","i":"101","t":"IF_STATEMENT","v":1,"c":[{"n":"true == true","i":"102","t":"BINARY_EXPRESSION","v":1,"c":[{"n":"true","i":"103","t":"LITERAL_EXPRESSION","v":5},{"n":"true","i":"105","t":"LITERAL_EXPRESSION","v":5},{"n":"EQEQ","i":"104","t":"EQEQ","v":1}]},{"n":"","i":"107","t":"CODE_BLOCK","v":1,"c":[{"n":"System.out.println('qeqqwq')","i":"109","t":"METHOD_CALL_EXPRESSION","v":1,"c":[{"n":"'qeqqwq'","i":"120","t":"LITERAL_EXPRESSION","v":5},{"n":"System.out","i":"114","t":"REFERENCE_EXPRESSION","v":1,"c":[{"n":"System","i":"118","t":"REFERENCE_EXPRESSION","v":1}]}]}]}]},{"n":"aa1","i":"122","t":"LOCAL_VARIABLE","v":1,"c":[{"n":"aaa","i":"127","t":"JAVA_CODE_REFERENCE","v":1},{"n":"aaa","i":"125","t":"JAVA_CODE_REFERENCE","v":1}]},{"n":"body = 'asdasda'","i":"211","t":"ASSIGNMENT_EXPRESSION","v":1,"c":[{"n":"body","i":"212","t":"REFERENCE_EXPRESSION","v":1},{"n":"'asdasda'","i":"213","t":"LITERAL_EXPRESSION","v":5}]},{"n":"qweerwer","i":"215","t":"LOCAL_VARIABLE","v":1,"c":[{"n":"1","i":"218","t":"LITERAL_EXPRESSION","v":5}]},{"n":"req","i":"156","t":"LOCAL_VARIABLE","v":1,"c":[{"n":"new HttpGet('http","i":"163","t":"NEW_EXPRESSION","v":1,"c":[{"n":"HttpGet","i":"164","t":"JAVA_CODE_REFERENCE","v":1},{"n":"","i":"165","t":"EXPRESSION_LIST","v":1,"c":[{"n":"'pppppp'","i":"167","t":"LITERAL_EXPRESSION","v":5},{"n":"'http","i":"166","t":"LITERAL_EXPRESSION","v":5}]}]},{"n":"HttpGet","i":"159","t":"JAVA_CODE_REFERENCE","v":1}]},{"n":"qweerwer = 5675","i":"220","t":"ASSIGNMENT_EXPRESSION","v":1,"c":[{"n":"qweerwer","i":"221","t":"REFERENCE_EXPRESSION","v":1},{"n":"5675","i":"222","t":"LITERAL_EXPRESSION","v":5}]},{"n":"qqqq","i":"238","t":"LOCAL_VARIABLE","v":1,"c":[{"n":"String","i":"241","t":"JAVA_CODE_REFERENCE","v":1},{"n":"'44444'","i":"242","t":"LITERAL_EXPRESSION","v":5}]},{"n":"aaa","i":"64","t":"CLASS","v":1,"c":[{"n":"propA","i":"69","t":"FIELD","v":1},{"n":"b","i":"85","t":"METHOD","v":1,"c":[{"n":"()","i":"89","t":"PARAMETER_LIST","v":1},{"n":"","i":"91","t":"CODE_BLOCK","v":1,"c":[{"n":"readFiles()","i":"97","t":"METHOD_CALL_EXPRESSION","v":1,"c":[{"n":"readFiles","i":"98","t":"REFERENCE_EXPRESSION","v":1}]},{"n":"a()","i":"93","t":"METHOD_CALL_EXPRESSION","v":1,"c":[{"n":"a","i":"94","t":"REFERENCE_EXPRESSION","v":1}]}]}]},{"n":"aaa","i":"72","t":"METHOD","v":1,"c":[{"n":"","i":"77","t":"CODE_BLOCK","v":1},{"n":"()","i":"75","t":"PARAMETER_LIST","v":1}]},{"n":"a","i":"78","t":"METHOD","v":1,"c":[{"n":"","i":"84","t":"CODE_BLOCK","v":1},{"n":"()","i":"82","t":"PARAMETER_LIST","v":1}]}]}]},{"n":"args","i":"45","t":"PARAMETER","v":1,"c":[{"n":"String","i":"49","t":"JAVA_CODE_REFERENCE","v":1}]},{"n":"IOException","i":"58","t":"JAVA_CODE_REFERENCE","v":1},{"n":"throws","i":"57","t":"THROWS_KEYWORD","v":1}]},{"n":"readFiles","i":"99","t":"METHOD","v":1,"c":[{"n":"qqweqw","i":"247","t":"PARAMETER","v":1,"c":[{"n":"String","i":"250","t":"JAVA_CODE_REFERENCE","v":1}]},{"n":"","i":"252","t":"CODE_BLOCK","v":1,"c":[{"n":"","i":"253","t":"TRY_STATEMENT","v":1,"c":[{"n":"","i":"347","t":"CATCH_SECTION","v":1,"c":[{"n":"IOException","i":"352","t":"JAVA_CODE_REFERENCE","v":1},{"n":"","i":"354","t":"EXPRESSION_STATEMENT","v":1,"c":[{"n":"e.printStackTrace","i":"356","t":"REFERENCE_EXPRESSION","v":1,"c":[{"n":"e","i":"360","t":"REFERENCE_EXPRESSION","v":1}]}]},{"n":"catch","i":"348","t":"CATCH_KEYWORD","v":1}]},{"n":"br","i":"255","t":"RESOURCE_VARIABLE","v":1,"c":[{"n":"BufferedReader","i":"258","t":"JAVA_CODE_REFERENCE","v":1},{"n":"new BufferedReader(new FileReader('/home/phantomv/","i":"261","t":"NEW_EXPRESSION","v":1,"c":[{"n":"new FileReader('/home/phantomv/Desktop/experimenta","i":"264","t":"NEW_EXPRESSION","v":1,"c":[{"n":"'/home/phantomv/Desktop/experimental/java_basic_io","i":"269","t":"LITERAL_EXPRESSION","v":5},{"n":"FileReader","i":"265","t":"JAVA_CODE_REFERENCE","v":1}]},{"n":"BufferedReader","i":"262","t":"JAVA_CODE_REFERENCE","v":1}]}]},{"n":"","i":"270","t":"CODE_BLOCK","v":1,"c":[{"n":"","i":"298","t":"WHILE_STATEMENT","v":1,"c":[{"n":"line != null","i":"300","t":"BINARY_EXPRESSION","v":1,"c":[{"n":"NE","i":"302","t":"NE","v":1},{"n":"NULL_KEYWORD","i":"304","t":"NULL_KEYWORD","v":1},{"n":"line","i":"301","t":"REFERENCE_EXPRESSION","v":1}]},{"n":"","i":"306","t":"CODE_BLOCK","v":1,"c":[{"n":"br.asdasd()","i":"332","t":"METHOD_CALL_EXPRESSION","v":1,"c":[{"n":"br","i":"334","t":"REFERENCE_EXPRESSION","v":1}]},{"n":"line = br.readLine()","i":"325","t":"ASSIGNMENT_EXPRESSION","v":1,"c":[{"n":"br.readLine","i":"328","t":"REFERENCE_EXPRESSION","v":1,"c":[{"n":"br","i":"329","t":"REFERENCE_EXPRESSION","v":1}]},{"n":"line","i":"326","t":"REFERENCE_EXPRESSION","v":1}]},{"n":"sb.append(line)","i":"308","t":"METHOD_CALL_EXPRESSION","v":1,"c":[{"n":"sb","i":"311","t":"REFERENCE_EXPRESSION","v":1},{"n":"line","i":"313","t":"REFERENCE_EXPRESSION","v":1}]},{"n":"sb.append(System.lineSeparator())","i":"315","t":"METHOD_CALL_EXPRESSION","v":1,"c":[{"n":"System.lineSeparator()","i":"319","t":"METHOD_CALL_EXPRESSION","v":1,"c":[{"n":"System","i":"322","t":"REFERENCE_EXPRESSION","v":1}]},{"n":"sb","i":"317","t":"REFERENCE_EXPRESSION","v":1}]}]},{"n":"while","i":"299","t":"WHILE_KEYWORD","v":1}]},{"n":"System.out.println(sb.toString())","i":"337","t":"METHOD_CALL_EXPRESSION","v":1,"c":[{"n":"System.out","i":"339","t":"REFERENCE_EXPRESSION","v":1,"c":[{"n":"System","i":"340","t":"REFERENCE_EXPRESSION","v":1}]},{"n":"sb.toString()","i":"342","t":"METHOD_CALL_EXPRESSION","v":1,"c":[{"n":"sb","i":"345","t":"REFERENCE_EXPRESSION","v":1}]}]},{"n":"sb","i":"279","t":"LOCAL_VARIABLE","v":1,"c":[{"n":"StringBuilder","i":"286","t":"JAVA_CODE_REFERENCE","v":1},{"n":"StringBuilder","i":"282","t":"JAVA_CODE_REFERENCE","v":1}]},{"n":"line","i":"289","t":"LOCAL_VARIABLE","v":1,"c":[{"n":"String","i":"292","t":"JAVA_CODE_REFERENCE","v":1},{"n":"br.readLine","i":"294","t":"REFERENCE_EXPRESSION","v":1,"c":[{"n":"br","i":"296","t":"REFERENCE_EXPRESSION","v":1}]}]},{"n":"System.out.println(qqweqw)","i":"272","t":"METHOD_CALL_EXPRESSION","v":1,"c":[{"n":"qqweqw","i":"277","t":"REFERENCE_EXPRESSION","v":1},{"n":"System.out","i":"274","t":"REFERENCE_EXPRESSION","v":1,"c":[{"n":"System","i":"275","t":"REFERENCE_EXPRESSION","v":1}]}]}]}]},{"n":"xx1","i":"363","t":"LOCAL_VARIABLE","v":1,"c":[{"n":"Cc","i":"368","t":"JAVA_CODE_REFERENCE","v":1},{"n":"Cc","i":"366","t":"JAVA_CODE_REFERENCE","v":1}]},{"n":"xx1.aw()","i":"371","t":"METHOD_CALL_EXPRESSION","v":1,"c":[{"n":"xx1","i":"373","t":"REFERENCE_EXPRESSION","v":1}]},{"n":"","i":"375","t":"RETURN_STATEMENT","v":1,"c":[{"n":"return","i":"376","t":"RETURN_KEYWORD","v":1},{"n":"5","i":"377","t":"LITERAL_EXPRESSION","v":5}]}]}]}]},{"n":"Cc","i":"16","t":"CLASS","v":1,"c":[{"n":"aw","i":"28","t":"METHOD","v":1,"c":[{"n":"","i":"34","t":"CODE_BLOCK","v":1},{"n":"()","i":"32","t":"PARAMETER_LIST","v":1}]},{"n":"Cc","i":"21","t":"METHOD","v":1,"c":[{"n":"()","i":"25","t":"PARAMETER_LIST","v":1},{"n":"","i":"27","t":"CODE_BLOCK","v":1}]}]}]}]}]},{"n":"/","i":"381","t":"null","v":1,"c":[{"n":"/","i":"379","t":"null","v":1,"c":[{"n":"AppTest.java","i":"378","t":"java.FILE","v":1,"c":[{"n":"shouldAnswerWithTrue","i":"391","t":"METHOD","v":1,"c":[{"n":"","i":"393","t":"ANNOTATION","v":1,"c":[{"n":"AT","i":"394","t":"AT","v":1},{"n":"Test","i":"395","t":"JAVA_CODE_REFERENCE","v":1},{"n":"PsiAnnotationParameterList","i":"401","t":"ANNOTATION_PARAMETER_LIST","v":1}]},{"n":"()","i":"404","t":"PARAMETER_LIST","v":1},{"n":"","i":"407","t":"EXPRESSION_STATEMENT","v":1,"c":[{"n":"assertTrue( true )","i":"408","t":"METHOD_CALL_EXPRESSION","v":1,"c":[{"n":"assertTrue","i":"409","t":"REFERENCE_EXPRESSION","v":1},{"n":"true","i":"414","t":"LITERAL_EXPRESSION","v":5}]}]}]},{"n":"com.example1","i":"384","t":"JAVA_CODE_REFERENCE","v":1,"c":[{"n":"com","i":"385","t":"JAVA_CODE_REFERENCE","v":1}]}]}]}]}]}]}]}]}]},{"n":"","i":"268","t":"EXPRESSION_LIST","v":1},{"n":"com.example1","i":"13","t":"PACKAGE_STATEMENT","v":1},{"n":"","i":"271","t":"EXPRESSION_STATEMENT","v":1},{"n":"System.out.println","i":"273","t":"REFERENCE_EXPRESSION","v":1},{"n":"","i":"276","t":"EXPRESSION_LIST","v":1},{"n":"","i":"278","t":"DECLARATION_STATEMENT","v":1},{"n":"StringBuilder.class","i":"284","t":"null","v":1},{"n":"new StringBuilder()","i":"285","t":"NEW_EXPRESSION","v":1},{"n":"","i":"288","t":"DECLARATION_STATEMENT","v":1},{"n":"br.readLine()","i":"293","t":"METHOD_CALL_EXPRESSION","v":1},{"n":"(String[] args)","i":"44","t":"PARAMETER_LIST","v":1},{"n":"null","i":"303","t":"LITERAL_EXPRESSION","v":5},{"n":"","i":"305","t":"BLOCK_STATEMENT","v":1},{"n":"String.class","i":"51","t":"null","v":1},{"n":"","i":"307","t":"EXPRESSION_STATEMENT","v":1},{"n":"sb.append","i":"309","t":"REFERENCE_EXPRESSION","v":1},{"n":"/java.base","i":"54","t":"null","v":1},{"n":"/home/phantomv/.jdks/corretto-11.0.9.1!/","i":"55","t":"null","v":1,"c":[{"n":"/","i":"53","t":"null","v":1,"c":[{"n":"/","i":"61","t":"null","v":1,"c":[{"n":"FileReader","i":"266","t":"CLASS","v":1},{"n":"PrintStream","i":"112","t":"CLASS","v":1,"c":[{"n":"println","i":"111","t":"METHOD","v":1}]},{"n":"BufferedReader","i":"259","t":"CLASS","v":1,"c":[{"n":"readLine","i":"295","t":"METHOD","v":1}]},{"n":"IOException","i":"59","t":"CLASS","v":1}]},{"n":"/","i":"52","t":"null","v":1,"c":[{"n":"StringBuilder","i":"283","t":"CLASS","v":1,"c":[{"n":"toString","i":"344","t":"METHOD","v":1},{"n":"append","i":"310","t":"METHOD","v":1}]},{"n":"String","i":"50","t":"CLASS","v":1},{"n":"Throwable","i":"358","t":"CLASS","v":1,"c":[{"n":"printStackTrace","i":"357","t":"METHOD","v":1}]},{"n":"System","i":"116","t":"CLASS","v":1,"c":[{"n":"loadLibrary","i":"132","t":"METHOD","v":1},{"n":"lineSeparator","i":"321","t":"METHOD","v":1},{"n":"out","i":"115","t":"FIELD","v":1}]}]}]}]},{"n":"","i":"312","t":"EXPRESSION_LIST","v":1},{"n":"","i":"314","t":"EXPRESSION_STATEMENT","v":1},{"n":"IOException.class","i":"60","t":"null","v":1},{"n":"sb.append","i":"316","t":"REFERENCE_EXPRESSION","v":1},{"n":"","i":"318","t":"EXPRESSION_LIST","v":1},{"n":"","i":"63","t":"DECLARATION_STATEMENT","v":1},{"n":"System.lineSeparator","i":"320","t":"REFERENCE_EXPRESSION","v":1},{"n":"","i":"324","t":"EXPRESSION_STATEMENT","v":1},{"n":"br.readLine()","i":"327","t":"METHOD_CALL_EXPRESSION","v":1},{"n":"","i":"331","t":"EXPRESSION_STATEMENT","v":1},{"n":"br.asdasd","i":"333","t":"REFERENCE_EXPRESSION","v":1},{"n":"","i":"336","t":"EXPRESSION_STATEMENT","v":1},{"n":"System.out.println","i":"338","t":"REFERENCE_EXPRESSION","v":1},{"n":"","i":"341","t":"EXPRESSION_LIST","v":1},{"n":"sb.toString","i":"343","t":"REFERENCE_EXPRESSION","v":1},{"n":"","i":"92","t":"EXPRESSION_STATEMENT","v":1},{"n":"e","i":"349","t":"PARAMETER","v":1},{"n":"","i":"96","t":"EXPRESSION_STATEMENT","v":1},{"n":"","i":"353","t":"CODE_BLOCK","v":1},{"n":"e.printStackTrace()","i":"355","t":"METHOD_CALL_EXPRESSION","v":1},{"n":"Throwable.class","i":"359","t":"null","v":1},{"n":"","i":"106","t":"BLOCK_STATEMENT","v":1},{"n":"","i":"362","t":"DECLARATION_STATEMENT","v":1},{"n":"","i":"108","t":"EXPRESSION_STATEMENT","v":1},{"n":"System.out.println","i":"110","t":"REFERENCE_EXPRESSION","v":1},{"n":"new Cc()","i":"367","t":"NEW_EXPRESSION","v":1},{"n":"PrintStream.class","i":"113","t":"null","v":1},{"n":"","i":"370","t":"EXPRESSION_STATEMENT","v":1},{"n":"xx1.aw","i":"372","t":"REFERENCE_EXPRESSION","v":1},{"n":"System.class","i":"117","t":"null","v":1},{"n":"","i":"119","t":"EXPRESSION_LIST","v":1},{"n":"","i":"121","t":"DECLARATION_STATEMENT","v":1},{"n":"/","i":"380","t":"null","v":1},{"n":"new aaa()","i":"126","t":"NEW_EXPRESSION","v":1},{"n":"/","i":"382","t":"null","v":1},{"n":"com.example1","i":"383","t":"PACKAGE_STATEMENT","v":1},{"n":"","i":"129","t":"EXPRESSION_STATEMENT","v":1},{"n":"AppTest","i":"386","t":"CLASS","v":1},{"n":"System.loadLibrary","i":"131","t":"REFERENCE_EXPRESSION","v":1},{"n":"","i":"134","t":"EXPRESSION_LIST","v":1},{"n":"","i":"136","t":"DECLARATION_STATEMENT","v":1},{"n":"Test.class","i":"397","t":"null","v":1},{"n":"HttpClient.class","i":"142","t":"null","v":1},{"n":"/jun","i":"399","t":"null","v":1},{"n":"/home/phantomv/.m2/repository/junit/junit/4.11/jun","i":"400","t":"null","v":1,"c":[{"n":"/jun","i":"398","t":"null","v":1,"c":[{"n":"Test","i":"396","t":"CLASS","v":1},{"n":"Assert","i":"411","t":"CLASS","v":1,"c":[{"n":"assertTrue","i":"410","t":"METHOD","v":1}]}]}]},{"n":"/httpcompo","i":"146","t":"null","v":1},{"n":"/home/phantomv/.m2/repository/org/apache/httpcompo","i":"147","t":"null","v":1,"c":[{"n":"/httpcompo","i":"145","t":"null","v":1,"c":[{"n":"/httpcompo","i":"144","t":"null","v":1,"c":[{"n":"/httpcompo","i":"152","t":"null","v":1,"c":[{"n":"DefaultHttpClient","i":"150","t":"CLASS","v":1}]},{"n":"/httpcompo","i":"143","t":"null","v":1,"c":[{"n":"HttpClient","i":"141","t":"CLASS","v":1,"c":[{"n":"execute","i":"181","t":"METHOD","v":1}]},{"n":"HttpGet.class","i":"161","t":"null","v":1,"c":[{"n":"HttpGet","i":"160","t":"CLASS","v":1}]}]}]}]}]},{"n":"new DefaultHttpClient()","i":"148","t":"NEW_EXPRESSION","v":1},{"n":"","i":"406","t":"CODE_BLOCK","v":1},{"n":"DefaultHttpClient.class","i":"151","t":"null","v":1},{"n":"/httpcompo","i":"153","t":"null","v":1},{"n":"","i":"155","t":"DECLARATION_STATEMENT","v":1},{"n":"Assert.class","i":"412","t":"null","v":1},{"n":"","i":"413","t":"EXPRESSION_LIST","v":1},{"n":"/httpcompo","i":"162","t":"null","v":1},{"n":"","i":"168","t":"DECLARATION_STATEMENT","v":1},{"n":"HttpResponse.class","i":"174","t":"null","v":1},{"n":"/httpcompo","i":"177","t":"null","v":1},{"n":"/home/phantomv/.m2/repository/org/apache/httpcompo","i":"178","t":"null","v":1,"c":[{"n":"/httpcompo","i":"176","t":"null","v":1,"c":[{"n":"/httpcompo","i":"175","t":"null","v":1,"c":[{"n":"HttpResponse","i":"173","t":"CLASS","v":1,"c":[{"n":"getEntity","i":"200","t":"METHOD","v":1}]},{"n":"EntityUtils.class","i":"194","t":"null","v":1,"c":[{"n":"toString","i":"192","t":"METHOD","v":1}]}]}]}]},{"n":"httpclient.execute","i":"180","t":"REFERENCE_EXPRESSION","v":1},{"n":"","i":"183","t":"EXPRESSION_LIST","v":1},{"n":"","i":"185","t":"DECLARATION_STATEMENT","v":1},{"n":"EntityUtils.toString","i":"191","t":"REFERENCE_EXPRESSION","v":1},{"n":"EntityUtils","i":"193","t":"CLASS","v":1},{"n":"/httpcompo","i":"195","t":"null","v":1},{"n":"","i":"197","t":"EXPRESSION_LIST","v":1},{"n":"((org.apache.http.HttpResponse) response).getEntit","i":"199","t":"REFERENCE_EXPRESSION","v":1},{"n":"org.apache.http.HttpResponse","i":"204","t":"JAVA_CODE_REFERENCE","v":1},{"n":"org.apache","i":"206","t":"JAVA_CODE_REFERENCE","v":1},{"n":"","i":"210","t":"EXPRESSION_STATEMENT","v":1},{"n":"","i":"214","t":"DECLARATION_STATEMENT","v":1},{"n":"","i":"219","t":"EXPRESSION_STATEMENT","v":1},{"n":"","i":"223","t":"EXPRESSION_STATEMENT","v":1},{"n":"","i":"228","t":"EXPRESSION_LIST","v":1},{"n":"","i":"230","t":"EXPRESSION_STATEMENT","v":1},{"n":"System.out.println","i":"232","t":"REFERENCE_EXPRESSION","v":1},{"n":"","i":"235","t":"EXPRESSION_LIST","v":1},{"n":"","i":"237","t":"DECLARATION_STATEMENT","v":1},{"n":"(String qqweqw)","i":"246","t":"PARAMETER_LIST","v":1},{"n":"(BufferedReader br = new BufferedReader(new FileRe","i":"254","t":"RESOURCE_LIST","v":1}]};
+      let links = {99:[227],103:[105],105:[103],120:[114],135:[133],156:[184],163:[156],165:[163,164],166:[165],167:[165],169:[208],179:[169],184:[182],213:[212],215:[225],218:[215],222:[221],226:[225],229:[227],236:[233],242:[238],255:[334],261:[255],264:[261,262],269:[265,264],377:[99],414:[409]};
+      uncompress(data);
+      format = d3.format(",d");
+      height = 2000;
+      width = 3800;
+      treemap = (data) =>
+        d3
+          .treemap()
+          .size([width, height])
+          .paddingOuter(5)
+          .paddingTop(13)
+          .paddingInner(5)
+          .round(true)(d3.hierarchy(data).sum((d) => d.v));
+      const root = treemap(data);
+
+      var canvas = document.getElementById("canvas");
+      if (canvas.getContext) {
+        var ctx = canvas.getContext("2d");
+        function drawRect(n) {
+          ctx.fillStyle =
+            n.children != undefined
+              ? "rgba(0, 40, 160,0.2)"
+              : "rgba(80, 100, 233, 1)";
+          ctx.fillStyle =
+          n.data.t == "LITERAL_EXPRESSION" // change this accordingly
+              ? "rgba(130, 255, 255, 1)"
+              : ctx.fillStyle;
+          ctx.fillRect(n.x0, n.y0, n.x1 - n.x0+1, n.y1 - n.y0+1);
+          pos[n.data.i]=[n.x0, n.y0, n.x1 - n.x0+1, n.y1 - n.y0+1];
+          if (n.children != undefined) n.children.forEach((x) => drawRect(x));
+        }
+        function getMid(r){
+          return [r[0]+r[2]/2,r[1]+r[3]/2]
+        }
+        function drawLink(n){
+          Object.keys(n).forEach(x=>{
+            let sl=links[x];
+            sl.forEach(y=>{
+              let start = getMid(pos[x])
+              let end = getMid(pos[y])
+              ctx.beginPath();
+              ctx.moveTo(start[0],start[1]);
+              ctx.lineTo(end[0],end[1]);
+              ctx.lineWidth = 10;
+              ctx.stroke();
+            })
+          })
+        }
+        drawRect(root);
+        drawLink(links);
+        const svg = d3
+          .select("svg")
+          .attr("viewBox", [0, 0, width, height])
+          .style("font", "10px sans-serif");
+
+        const node = svg
+          .selectAll("g")
+          .data(d3.group(root, (d) => d.depth))
+          .join("g")
+          .selectAll("g")
+          .data((d) => d[1])
+          .join("g")
+          .attr("transform", (d) =>`translate(${d.x0},${d.y0})`);
+      node
+        .append("rect")
+        //.attr("id", (d) => (d.nodeUid = DOM.uid("node")).id)
+        .attr("width", (d) => d.x1 - d.x0)
+        .attr("height", (d) => d.y1 - d.y0)
+        .attr("id", (d) => d.data.id?d.data.id:null);
+      }
+  </script>
+</html>

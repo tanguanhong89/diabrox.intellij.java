@@ -13,6 +13,9 @@ class Indexer {
     var typeLookup: HashMap<Int, String> = HashMap() //doubly linked map
     var _typeLookup: HashMap<String, Int> = HashMap()
 
+    var nodeIdLookup: HashMap<Int, Int> = HashMap() //doubly linked map
+    var _nodeIdLookupHashToId: HashMap<Int, Int> = HashMap()
+
     var ignoredNames: Set<String> = mutableSetOf(
         "PsiExpressionStatement",
         "PsiExpressionList",
@@ -27,21 +30,8 @@ class Indexer {
         "PsiWhileStatement",
     )
 
-    var StructureGraph = Graph(
-        mutableSetOf(
-            "parent",
-            "child"
-        )
-    )
+    var StructureGraph = Graph()
 
-    var DataGraph = Graph(
-        mutableSetOf(
-            "ref",
-            "new",
-            "assignment",
-            "callargs"
-        )
-    )
 
     fun addOrGetTypeId(s: String): Int {
         if (!_typeLookup.containsKey(s)) {
@@ -58,13 +48,19 @@ class Indexer {
             s2 = s1[1]
         }
         s2 = s2.replace("\"", "'").replace("\n", "\\n")
-        if (s2 in ignoredNames) return GraphNode("", getHash(ele).toInt(), ele.elementType.toString(), ele, value)
+        var id = addOrGetUniqueId(ele)
+        if (s2 in ignoredNames) return GraphNode("", id, ele.elementType.toString(), ele, value)
         if (s2.length > 50) s2 = s2.substring(0, 50)
-        return GraphNode(s2, getHash(ele).toInt(), ele.elementType.toString(), ele, value)
+        return GraphNode(s2, id, ele.elementType.toString(), ele, value)
     }
 
-    fun getHash(ele: PsiElement): Int {
-        return System.identityHashCode(ele)
+    fun addOrGetUniqueId(ele: PsiElement): Int {
+        val s = System.identityHashCode(ele)
+        if (!_nodeIdLookupHashToId.containsKey(s)) {
+            nodeIdLookup[_nodeIdLookupHashToId.size] = s
+            _nodeIdLookupHashToId[s] = _nodeIdLookupHashToId.size
+        }
+        return _nodeIdLookupHashToId[s]!!
     }
 
 //    fun getNodesJsonString(): String {
@@ -90,8 +86,6 @@ class Indexer {
 
         srcNode?.let {
             tgtNode?.let {
-                DataGraph.addNode(srcNode)
-                DataGraph.addNode(tgtNode)
                 srcNode.addLink(tgtNode, type, value)
             }
         }
@@ -99,7 +93,7 @@ class Indexer {
 
     fun addStructNode(ele: PsiElement?): GraphNode? {
         if (ele == null) return null
-        val id = getHash(ele)
+        val id = addOrGetUniqueId(ele)
         if (StructureGraph.IdIndex.containsKey(id)) return StructureGraph.getId(id)
 
         var lastExistingParent = addStructNode(ele.parent)
@@ -139,7 +133,7 @@ class Indexer {
                 .setType(addOrGetTypeId(n.type))
                 .setValue(n.value)
 
-            r.addAllChildren(n.findLinksWithDirection(StructureGraph.ForLinks, true)
+            r.addAllChildren(n.findLinksWithDirection(StructureGraph.childLinkLabel, true)
                 .map { x -> foo(x.target) })
             return r.build()
         }
@@ -153,52 +147,92 @@ class Indexer {
         return r.build()
     }
 
-    fun toJsonStringNodes(): String {
+    fun toJsonStringNodes(compress: Boolean): String {
         fun foo(n: GraphNode): String {
-            var r = ArrayList<String>()
-            r.add("\"name\":\"" + n.name + "\"")
-            r.add("\"id\":\"" + n.id + "\"")
-            r.add("\"type\":\"" + n.type + "\"")
-            r.add("\"value\":" + n.value.toString() + "")
-            var children = n.findLinksWithDirection(StructureGraph.ForLinks, true)
-            if (children.size > 0) {
-                r.add("\"children\":[" + children.map { x -> foo(x.target) }.joinToString(",") + "]")
+            if (compress) {
+                var r = ArrayList<String>()
+                //r.add("\"n\":\"" + n.name + "\"")
+                r.add("\"i\":\"" + n.id + "\"")
+                r.add("\"t\":\"" + addOrGetTypeId(n.type).toString() + "\"")
+                r.add("\"v\":" + n.value.toString() + "")
+                var children = n.findLinksWithDirection(StructureGraph.childLinkLabel, true)
+                if (children.size > 0) {
+                    r.add("\"c\":[" + children.map { x -> foo(x.target) }.joinToString(",") + "]")
+                }
+                return "{" + r.joinToString(",") + "}"
+            } else {
+                var r = ArrayList<String>()
+                r.add("\"n\":\"" + n.name + "\"")
+                r.add("\"i\":\"" + n.id + "\"")
+                r.add("\"t\":\"" + n.type + "\"")
+                r.add("\"v\":" + n.value.toString() + "")
+                var children = n.findLinksWithDirection(StructureGraph.childLinkLabel, true)
+                if (children.size > 0) {
+                    r.add("\"c\":[" + children.map { x -> foo(x.target) }.joinToString(",") + "]")
+                }
+                return "{" + r.joinToString(",") + "}"
             }
-            return "{" + r.joinToString(",") + "}"
         }
 
         var r1 = ArrayList<String>()
-        r1.add("\"name\":\"root\"")
-        r1.add("\"id\":\"0\"")
-        r1.add("\"type\":\"root\"")
-        r1.add("\"value\":1")
-        r1.add("\"children\":[" + StructureGraph.heads.values.map { x -> foo(x) }.joinToString(",") + "]")
+        r1.add("\"n\":\"root\"")
+        r1.add("\"i\":\"0\"")
+        r1.add("\"t\":" + addOrGetTypeId("root").toString())
+        r1.add("\"v\":1")
+        r1.add("\"c\":[" + StructureGraph.heads.values.map { x -> foo(x) }.joinToString(",") + "]")
         return "{" + r1.joinToString(",") + "}"
+    }
+
+    fun toJsonStringDataflow(): String {
+        var r = ArrayList<String>()
+        var covered = mutableSetOf<Int>()
+        fun foo(v: GraphNode) {
+            if (!covered.contains(v.id)) {
+                covered.add(v.id)
+                val datalinks = v.findLinksWithDirection(mutableSetOf("data"), true)
+                datalinks.forEach { l ->
+                    print(v.name)
+                    print(":")
+                    println(l.target.name)
+                    foo(l.target)
+                }
+            }
+        }
+        StructureGraph.IdIndex.forEach { k, v ->
+            if (v.type.equals("LITERAL_EXPRESSION")) {
+                foo(v)
+            }
+        }
+        return "{" + r.joinToString(",") + "}"
+    }
+
+    fun toJsonStringDataflow1(): String {
+        var r = ArrayList<String>()
+        StructureGraph.IdIndex.forEach { k, v ->
+            var dlinks = v.findLinksWithDirection(mutableSetOf("data"), true)
+            if (dlinks.size > 0) {
+                r.add(v.id.toString() + ":[" + dlinks.map { x -> x.target.id.toString() }.joinToString(",") + "]")
+            }
+        }
+        return "{" + r.joinToString(",") + "}"
     }
 
     fun toJsonStringLinks(): String {
         var r = ArrayList<String>()
-        for (n in DataGraph.IdIndex.values) {
-            var links = n.findLinksWithDirection(DataGraph.ForLinks, true)
-            for (l in links) {
-                var r2 = ArrayList<String>()
-                r2.add("\"src\":" + n.id)
-                r2.add("\"dst\":" + l.target.id)
-                r2.add("\"type\":" + "\"" + l.type + "\"")
-                r.add("{" + r2.joinToString(",") + "}")
-            }
+        StructureGraph.headGraphs.forEach { x ->
+            r.add("\"" + x.key.toString() + "\":[" + x.value.joinToString(",") + "]")
         }
-        return "[" + r.joinToString(",") + "]"
+        return "{" + r.joinToString(",") + "}"
     }
 
-    fun toCompressedOutput() {
-        var protobufStr = toVisualObjProtobuf().toByteArray().contentToString()
-        var typeLKArr = ArrayList<String>()
+    fun toJsonStringNodesProtobuf() {
+        val protobufStr = toVisualObjProtobuf().toByteArray()!!.contentToString()
+        val typeLKArr = ArrayList<String>()
 
         for (k in typeLookup) {
             typeLKArr.add(k.key.toString() + ":\"" + k.value + "\"")
         }
-        var typeLookupSerialized = "{" + typeLKArr.joinToString(",") + "}"
+        val typeLookupSerialized = "{" + typeLKArr.joinToString(",") + "}"
         println(protobufStr)
         println(typeLookupSerialized)
     }

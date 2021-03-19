@@ -1,0 +1,51 @@
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <style>
+        body {
+            margin: 0;
+            background-color: black;
+        }
+    </style>
+    <style type="text/css">
+        .force-graph-container .graph-tooltip {
+            position: absolute;
+            transform: translate(-50%, 25px);
+            font-family: sans-serif;
+            font-size: 16px;
+            padding: 4px;
+            border-radius: 3px;
+            color: #eee;
+            background: rgba(0, 0, 0, 0.65);
+            visibility: hidden;
+            /* by default */
+        }
+    </style>
+    <script src="./connect.js"></script>
+    <script src="./a.js"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src=" https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="http://cdn.rawgit.com/dcodeIO/protobuf.js/6.8.8/dist/protobuf.min.js"></script>
+</head>
+
+<body>
+    <svg id="svg" width="3000" height="1500" style="background-color: black;position: absolute;font: 10px sans-serif;fill-opacity: 100;"></svg>
+</body>
+<script>
+    let color = d3.scaleSequential([10, 0], d3.interpolateSpectral);
+
+    format = d3.format(",d");
+
+    drawTreemap({
+        "n": "svg",
+        "children": [{
+            "n": "1",
+            "d": 0,
+            "v": 1
+        }]
+    }, 0)
+    createHierarchicalTreemap(data)
+</script>
+
+</html>

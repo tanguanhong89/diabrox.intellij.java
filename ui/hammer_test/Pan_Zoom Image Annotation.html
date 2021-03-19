@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        body {
+            background: url("https://s.cdpn.io/44759/grey_wash_wall.png");
+            font-family: "din-condensed-web", sans-serif;
+            font-size: 0.8em;
+        }
+        
+        .app-wrapper {
+            overflow: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        
+        .pan-image {
+            -moz-transform: translate(0, 0);
+            -ms-transform: translate(0, 0);
+            -webkit-transform: translate(0, 0);
+            transform: translate(0, 0);
+            -moz-backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            -moz-transition: all 0.35s cubic-bezier(0, 0, 0, 1);
+            -o-transition: all 0.35s cubic-bezier(0, 0, 0, 1);
+            -webkit-transition: all 0.35s cubic-bezier(0, 0, 0, 1);
+            transition: all 0.35s cubic-bezier(0, 0, 0, 1);
+            -moz-transform-origin: 0 0;
+            -ms-transform-origin: 0 0;
+            -webkit-transform-origin: 0 0;
+            transform-origin: 0 0;
+            display: block;
+            width: 1px;
+            height: 1px;
+            position: absolute;
+            width: 100%;
+            z-index: 1;
+            margin: auto;
+        }
+        
+        .pan-image:before {
+            position: absolute;
+            content: "";
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2em solid rgba(0, 0, 0, 0.15);
+        }
+        
+        .pan-image:after {
+            position: absolute;
+            content: "";
+            top: -8em;
+            left: -8em;
+            right: -8em;
+            bottom: -8em;
+            border: 8em solid #000;
+        }
+        
+        .pan-image img {
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        
+        .right-menu-wrapper {
+            width: 33.33333%;
+            max-width: 20em;
+            min-width: 16.6666666666667em;
+            position: absolute;
+            right: 0;
+            top: 4.16666666666667em;
+            z-index: 48;
+            font-size: 1.2em;
+        }
+        
+        .right-box {
+            -moz-transition: all 0.35s cubic-bezier(0, 0, 0, 1);
+            -o-transition: all 0.35s cubic-bezier(0, 0, 0, 1);
+            -webkit-transition: all 0.35s cubic-bezier(0, 0, 0, 1);
+            transition: all 0.35s cubic-bezier(0, 0, 0, 1);
+            -moz-transform: translate(110%, 0);
+            -ms-transform: translate(110%, 0);
+            -webkit-transform: translate(110%, 0);
+            transform: translate(110%, 0);
+            -moz-box-shadow: 0 0 1em #000;
+            -webkit-box-shadow: 0 0 1em #000;
+            box-shadow: 0 0 1em #000;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            background: rgba(0, 0, 0, 0.75);
+            border-left: 1px solid #000;
+            position: absolute;
+            width: 100%;
+        }
+        
+        .right-box.on {
+            -moz-transform: translate(0, 0);
+            -ms-transform: translate(0, 0);
+            -webkit-transform: translate(0, 0);
+            transform: translate(0, 0);
+        }
+        
+        .image-nav ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        .image-nav ul li {
+            border-bottom: 1px solid #000;
+        }
+        
+        .image-nav ul li a,
+        .content-box {
+            display: block;
+            padding: 1.5em;
+            color: #fff;
+            text-decoration: none;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .image-nav ul li a:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .image-nav ul li a span {
+            display: block;
+        }
+        
+        .image-preview {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 4em;
+            background: url(https://s.cdpn.io/44759/highres-dino-thumb.jpg) no-repeat;
+            border-right: 1px solid #000;
+            -webkit-filter: grayscale(80%);
+            filter: grayscale(80%);
+        }
+        
+        a:hover .image-preview {
+            -webkit-filter: none;
+            filter: none;
+        }
+        
+        .image-label {
+            margin-left: 4em;
+        }
+        
+        .content-box {
+            font-size: 1.1em;
+            line-height: 1.42em;
+        }
+        
+        .nav-bar {
+            -moz-box-shadow: 0 0.2em 0.5em rgba(0, 0, 0, 0.5);
+            -webkit-box-shadow: 0 0.2em 0.5em rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0.2em 0.5em rgba(0, 0, 0, 0.5);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4em;
+            background: rgba(0, 0, 0, 0.75);
+            font-size: 1.25em;
+            border-bottom: 1px solid #000;
+            z-index: 50;
+        }
+        
+        .nav-bar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            text-align: right;
+        }
+        
+        .nav-bar ul li {
+            display: inline-block;
+            border-left: 1px solid #000;
+            margin-right: -6px;
+        }
+        
+        .nav-bar ul li:last-child {
+            margin-right: 0;
+        }
+        
+        .nav-bar ul li.back-button {
+            position: absolute;
+            left: 0;
+            width: 4em;
+            border-right: 1px solid #000;
+            border-left: none;
+            margin-right: 0;
+        }
+        
+        .nav-bar ul li:hover a {
+            border-color: rgba(222, 222, 222, 0.35);
+        }
+        
+        .nav-bar ul li a.active {
+            color: #ffdb05;
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .nav-bar ul li a {
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 0.1em 0 rgba(0, 0, 0, 0.5);
+            text-decoration: none;
+            padding: 1.5em;
+            width: 4em;
+            height: 4em;
+            border: 0.25em solid transparent;
+            position: relative;
+        }
+        
+        .nav-bar ul li a span {
+            width: 1em;
+            height: 1em;
+            margin: auto;
+            display: block;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            font-size: 0.8em;
+        }
+        
+        .nav-bar .label {
+            font-size: 1em;
+            position: absolute;
+            left: 2.66666666666667em;
+            right: 2.66666667em;
+            padding: 0.81em 1em;
+            margin: 0;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 0.05em 0.075em black;
+            font-weight: 400;
+            font-size: 1.5em;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        
+        @media screen and (min-width: 42em) {
+            body {
+                font-size: 0.9em;
+            }
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+
+    <script>
+        window.console = window.console || function(t) {};
+    </script>
+
+    <script>
+        if (document.location.search.match(/type=embed/gi)) {
+            window.parent.postMessage("resize", "*");
+        }
+    </script>
+</head>
+
+<body translate="no">
+    <!-- Shift + click to emulate multitouch -->
+    <canvas id="canvas" width="3800" height="2000" style="position: absolute"></canvas>
+    <script type="text/javascript">
+        try {
+            Typekit.load();
+        } catch (e) {}
+    </script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src=" https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://s.cdpn.io/44759/hammer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.3/jquery.mousewheel.min.js"></script>
+    <script src="./data.js"></script>
+    <script src="./transformation.js"></script>
+    <script id="rendered-js">
+        let pos = {};
+        format = d3.format(",d");
+        height = 2000;
+        width = 3800;
+        treemap = (data) =>
+            d3
+            .treemap()
+            .size([width, height])
+            .paddingOuter(5)
+            .paddingTop(13)
+            .paddingInner(5)
+            .round(true)(d3.hierarchy(data).sum((d) => d.v));
+        const root = treemap(data);
+
+        var canvas = document.getElementById("canvas");
+        if (canvas.getContext) {
+            var ctx = canvas.getContext("2d");
+
+            function drawRect(n) {
+                ctx.fillStyle =
+                    n.children != undefined ?
+                    "rgba(0, 40, 160,0.2)" :
+                    "rgba(80, 100, 233, 1)";
+                ctx.fillStyle =
+                    n.data.t == "LITERAL_EXPRESSION" // change this accordingly
+                    ?
+                    "rgba(130, 255, 255, 1)" :
+                    ctx.fillStyle;
+                ctx.fillRect(n.x0, n.y0, n.x1 - n.x0, n.y1 - n.y0);
+                pos[n.data.i] = [n.x0, n.y0, n.x1 - n.x0, n.y1 - n.y0];
+                if (n.children != undefined) n.children.forEach((x) => drawRect(x));
+            }
+
+            function getMid(r) {
+                return [r[0] + r[2] / 2, r[1] + r[3] / 2];
+            }
+
+            function drawLink(n) {
+                Object.keys(n).forEach((x) => {
+                    let sl = links[x];
+                    sl.forEach((y) => {
+                        let start = getMid(pos[x]);
+                        let end = getMid(pos[y]);
+                        ctx.beginPath();
+                        ctx.moveTo(start[0], start[1]);
+                        ctx.lineTo(end[0], end[1]);
+                        ctx.lineWidth = 10;
+                        ctx.stroke();
+                    });
+                });
+            }
+            drawRect(root);
+            drawLink(links);
+        }
+
+        function ZoomPanView(img_url, thumb_url) {
+            this.el_wrapper = $("<div />", {
+                class: "pan-image",
+            });
+
+            this.el_img = $("<img/>");
+            this.el_imgNav = $("#annotation-list");
+            this.img_src = img_url;
+            this.thumb_src = thumb_url;
+            this.thumbScale = 1;
+            this.actualWidth = 0;
+            this.actualHeight = 0;
+            this.scaleX = 1;
+            this.scaleY = 1;
+            this.translateX = 0;
+            this.translateY = 0;
+            this.centerMatrix = {};
+            this.annotations = [{
+                id: "ann2",
+                title: "Prehistoric Koala",
+                x: 2300,
+                y: 2150,
+                scale: 10,
+                content: "As you can see, the Prehistoric Koala is frightened by the mosh pit and running in a separate direction. Most likely towards Australia.",
+            }, {
+                id: "ann3",
+                title: "Thrashing",
+                x: 3450,
+                y: 1450,
+                scale: 0.9,
+                content: "It is commonly believed that thrash's origins were rooted in the mid to late 70's; this is not the case. Here an Ankylosaur is seen thrashing in the late Cretaceous period.",
+            }, {
+                id: "ann4",
+                title: "Mosh Pit",
+                x: 1400,
+                y: 1450,
+                scale: 0.3,
+                content: "Though it may look scary, most of these dinosaurs are having the best time.",
+            }, {
+                id: "ann5",
+                title: "Invisible Keyboard",
+                x: 4000,
+                y: 850,
+                scale: 0.8,
+                content: "After millions of years of evolution, Tyrannosaurs were perfectly suited as keyboardists and lead singers.",
+            }, ];
+
+            var self = this;
+
+            this.init = function(el_wrapper) {
+                this.el_img.attr("src", this.img_src).load(function() {
+                    var win_width = $(window).width();
+
+                    self.actualWidth = this.width;
+                    self.actualHeight = this.height;
+                    //console.log("Actual dimensions: " + this.width + "x" + this.height);
+
+                    self.thumbScale = 800 / this.width;
+
+                    self.scaleX = self.scaleY = win_width / self.actualWidth;
+
+                    var defaultTrans = getResetTransform(this);
+                    setTransform(
+                        el_wrapper,
+                        defaultTrans.scale,
+                        defaultTrans.translateX,
+                        defaultTrans.translateY
+                    );
+
+                    // set the css an add to DOM
+                    self.el_wrapper
+                        .css({
+                            width: self.actualWidth + "px",
+                            height: self.actualHeight + "px",
+                        })
+                        .append(this)
+                        .appendTo(".app-wrapper");
+
+                    // populate the annotation list
+                    for (i = 0; i < self.annotations.length; i++) {
+                        var ann = self.annotations[i];
+                        var annLink = $("<a />", {
+                            class: "annotation-link",
+                            id: ann.id,
+                        });
+
+                        annLink.append(
+                            '<span class="image-preview" style="' +
+                            "background-image:url(" +
+                            self.thumb_src +
+                            "); " +
+                            "background-position: " +
+                            -ann.x * self.thumbScale +
+                            "px " +
+                            -ann.y * self.thumbScale +
+                            "px" +
+                            '"></span>' +
+                            '<span class="image-label">' +
+                            ann.title +
+                            "</span>"
+                        );
+
+                        annLink.data("xpos", ann.x);
+                        annLink.data("ypos", ann.y);
+                        annLink.data("scale", ann.scale);
+                        annLink.data("content-id", ann.id + "-content");
+                        $("body").append(
+                            '<div id="' +
+                            ann.id +
+                            '-content" class="hidden">' +
+                            ann.content +
+                            "</div>"
+                        );
+                        annLink.on("tap click", function() {
+                            $(".image-nav").removeClass("on");
+                            $(".pan-image").css({
+                                "-webkit-transition": "all 1s cubic-bezier(.5,0,.5,1)",
+                            });
+
+                            var annID = $(this).data("content-id");
+                            setTimeout(function() {
+                                $(".pan-image").css({
+                                    "-webkit-transition": "all 0.35s cubic-bezier(0,0,0,1)",
+                                });
+                                $("#contentBox").html($("#" + annID).html());
+                                $("#contentBox").addClass("on");
+                            }, 2000);
+                            self.zoomToLocation(
+                                $(this).data("xpos"),
+                                $(this).data("ypos"),
+                                $(this).data("scale")
+                            );
+                        });
+                        $("<li />").append(annLink).appendTo(self.el_imgNav);
+                    }
+
+                    // touch events on body
+                    var hammertime = Hammer(document.body, {
+                        transform_always_block: true,
+                        transform_min_scale: 0.5,
+                    });
+
+                    var startTransform, endTransform;
+
+                    var midX = 0;
+                    var midY = 0;
+
+                    var isTransitioning;
+
+                    hammertime.on("touch drag transform doubletap", function(ev) {
+                        switch (ev.type) {
+                            case "touch":
+                                startTransform = {
+                                    scale: self.scaleX,
+                                    translateX: self.translateX,
+                                    translateY: self.translateY,
+                                };
+
+                                endTransform = {
+                                    scale: self.scaleX,
+                                    translateX: self.translateX,
+                                    translateY: self.translateY,
+                                };
+
+                                break;
+
+                            case "drag":
+                                endTransform.translateX =
+                                    startTransform.translateX + ev.gesture.deltaX;
+                                endTransform.translateY =
+                                    startTransform.translateY + ev.gesture.deltaY;
+                                ev.gesture.preventDefault();
+                                break;
+
+                            case "doubletap":
+                                endTransform = self.getResetTransform();
+                                break;
+
+                            case "transform":
+                                if (ev.gesture.touches.length == 2) {
+                                    midX =
+                                        (ev.gesture.touches[0].pageX +
+                                            ev.gesture.touches[1].pageX) /
+                                        2;
+                                    midY =
+                                        (ev.gesture.touches[0].pageY +
+                                            ev.gesture.touches[1].pageY) /
+                                        2;
+                                }
+                                endTransform = self.getTransformAfterScale(
+                                    midX,
+                                    midY,
+                                    startTransform.scale * ev.gesture.scale
+                                );
+
+                                startTransform.translateX = endTransform.translateX;
+                                startTransform.translateY = endTransform.translateY;
+                                ev.gesture.preventDefault();
+                                break;
+                        }
+
+                        setTransform(
+                            el_wrapper,
+                            endTransform.scale,
+                            endTransform.translateX,
+                            endTransform.translateY
+                        );
+
+                        //console.log(self.getBoundingBox());
+                    });
+
+                    $("body").bind(
+                        "mousewheel",
+                        function(event, delta, deltaX, deltaY) {
+                            var factor = deltaY > 0 ? 1.05 : 0.95;
+                            var et = self.getTransformAfterScale(
+                                event.pageX,
+                                event.pageY,
+                                self.scaleX * factor
+                            );
+                            setTransform(
+                                el_wrapper,
+                                et.scale,
+                                et.translateX,
+                                et.translateY
+                            );
+                        }
+                    );
+                });
+            };
+
+            this.getVirtualValue = function(screenVal) {
+                return screenVal / this.scaleX;
+            };
+
+            this.getScreenValue = function(virtualVal) {
+                return virtualVal * this.scaleX;
+            };
+
+            this.getTransformString = function() {
+                return (
+                    "matrix(" +
+                    this.scaleX +
+                    ", 0, 0, " +
+                    this.scaleY +
+                    ", " +
+                    this.translateX +
+                    ", " +
+                    this.translateY +
+                    ")"
+                );
+            };
+
+            this.getTransformAfterScale = function(x, y, scale) {
+                scale = Math.max(Math.min(scale, 2), 0.05); // TODO: update with min / max options
+
+                // find cursor offset within the element
+                x -= this.translateX;
+                y -= this.translateY;
+
+                // find the final position of the coordinate after scaling
+                var xf = (x * scale) / this.scaleX;
+                var yf = (y * scale) / this.scaleY;
+
+                // find the difference between the initial and final position
+                // and add the difference to the current position.
+                var dx = this.translateX + x - xf;
+                var dy = this.translateY + y - yf;
+
+                return {
+                    scale: scale,
+                    translateX: dx,
+                    translateY: dy,
+                };
+            };
+
+            this.getBoundingBox = function() {
+                var c_width = this.scaleX * this.actualWidth;
+                var c_height = this.scaleY * this.actualHeight;
+                var c_top = this.translateY;
+                var c_left = this.translateX;
+
+                //console.log(c_translateX);
+
+                return {
+                    top: c_top,
+                    right: c_left + c_width,
+                    bottom: c_top + c_height,
+                    left: c_left,
+                };
+            };
+
+            this.getVisibleBox = function() {};
+
+            this.getResetTransform = function() {
+                var targetScale = $(window).width() / this.actualWidth;
+                var targetTranslateY =
+                    $(window).height() / 2 - (this.actualHeight * targetScale) / 2;
+                return {
+                    scale: targetScale,
+                    translateX: 0,
+                    translateY: targetTranslateY,
+                };
+            };
+
+            this.zoomToLocation = function(x, y, scale) {
+                var finalWidth = this.actualWidth * scale;
+                var finalHeight = this.actualHeight * scale;
+                var finalX = -x * scale + $(window).width() / 2;
+                var finalY = -y * scale + $(window).height() / 2;
+                setTransform(el_wrapper, scale, finalX, finalY);
+            };
+
+            this.isPointInside = function(x, y) {
+                var rect = this.getBoundingBox();
+                return (
+                    x > rect.left && x < rect.right && y > rect.top && y < rect.bottom
+                );
+            };
+
+            this.init(this.el_wrapper);
+        }
+
+        $(document).ready(function() {
+            window.zpview = new ZoomPanView(
+                "https://s.cdpn.io/44759/highres-dino.jpg",
+                "https://s.cdpn.io/44759/highres-dino-thumb.jpg"
+            );
+        });
+        //# sourceURL=pen.js
+    </script>
+</body>
+
+</html>

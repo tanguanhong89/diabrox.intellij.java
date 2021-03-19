@@ -15,10 +15,6 @@ class Traversal {
 
         fun findLinks(ele: PsiElement, nodeIndex: Indexer) {
             findRef(ele, nodeIndex)
-//            findBinary(ele, nodeIndex)
-//            findNew(ele, nodeIndex)
-//            findAssignment(ele, nodeIndex)
-//            findMethodCallArgs(ele, nodeIndex)
         }
 
         fun findRef(ele: PsiElement, nodeIndex: Indexer) {
@@ -43,8 +39,9 @@ class Traversal {
                     while (c != null) {
                         if (c.elementType.toString().endsWith("_EXPRESSION")) {
                             nodeIndex.addDataLink(child, c, "binary", null)
+                            break
                         } else {
-                            c = child.nextSibling
+                            c = c.nextSibling
                         }
                     }
                     break
@@ -52,49 +49,6 @@ class Traversal {
             }
         }
 
-        fun findNew(ele: PsiElement, nodeIndex: Indexer) {
-            if (ele.elementType.toString() != "NEW_EXPRESSION") return
-            var eleParent = ele.parent
-            while (!eleParent.elementType.toString().endsWith("VARIABLE")) {
-                eleParent = eleParent.parent
-            }
-            for (child in ele.children) {
-                if (!checkIsInvalidExpressionList(child)) {
-                    nodeIndex.addDataLink(eleParent, child, "new", null)
-                }
-            }
-        }
-
-        fun findAssignment(ele: PsiElement, nodeIndex: Indexer) {
-            if (ele.elementType.toString() != "ASSIGNMENT_EXPRESSION") return
-            for (child in ele.children) {
-                if (child.elementType.toString().equals("REFERENCE_EXPRESSION")) {
-                    for (child1 in ele.children) {
-                        if (!child1.elementType.toString().equals("REFERENCE_EXPRESSION")) {
-                            nodeIndex.addDataLink(child, child1, "assignment", null)
-                        }
-                    }
-                    break
-                }
-            }
-        }
-
-        fun findMethodCallArgs(ele: PsiElement, nodeIndex: Indexer) {
-            // if no args, then no tgt
-            if (ele.elementType.toString() != "METHOD_CALL_EXPRESSION") return
-            for (child in ele.children) {
-                if (child.elementType.toString().equals("REFERENCE_EXPRESSION")) {
-                    for (child1 in ele.children) {
-                        if (child1.elementType.toString() == "EXPRESSION_LIST") {
-                            for (child2 in child1.children) {
-                                nodeIndex.addDataLink(child, child2, "callargs", null)
-                            }
-                        }
-                    }
-                    break
-                }
-            }
-        }
 
         fun isStubIgnored(ele: PsiElement): Boolean {
             val ignoredL = mutableSetOf(
@@ -116,6 +70,8 @@ class Traversal {
                 "RBRACE",
                 "RPARENTH",
                 "LPARENTH",
+                "RBRACKET",
+                "LBRACKET",
                 "DOT",
                 "CLASS_KEYWORD",
                 "NEW_KEYWORD",
@@ -124,6 +80,9 @@ class Traversal {
                 "STRING_LITERAL",
                 "INTEGER_LITERAL", "INT_KEYWORD", "STATIC_KEYWORD",
                 "TRY_KEYWORD",
+                "VOID_KEYWORD",
+                "PUBLIC_KEYWORD",
+                "IF_KEYWORD"
             )
             return ignoredL.contains(ele.elementType.toString())
         }
