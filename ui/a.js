@@ -1,10 +1,11 @@
-let data = generateData(4, 7); // 6,10
+//reasonably 5k obj with debugDraw, easily >10k~30k no debugDraw
+let data = generateData(4, 4); // 6,10
 let links = generateLinks(data);
-let connectedLinks = {}
 let rectPorts = {}
 let connectivityGraphs = {}
-let drawn = new Set();
-let minSize = 2
+let drawnNodes = new Set();
+let drawnLines = {};
+let minSize = 1
 
 function generateData(maxDepth, maxChildren) {
     let count = 0
@@ -25,7 +26,7 @@ function generateData(maxDepth, maxChildren) {
             return
         }
         for (i = 0; i < maxChildren; i++) {
-            if (Math.random() > 0.5) {
+            if (Math.random() > 0.5 || true) {
                 let cc = boo(n + "." + i, d + 1)
                 rr["c"].push(cc)
             }
@@ -60,18 +61,19 @@ function generateLinks(data) {
     }
 
     function foo(src, dst) {
+        let p = 0.95
         for (i = 0; i < src.length; i++) {
             for (j = 0; j < dst.length; j++) {
-                if (Math.random() > 0.7) {
+                if (Math.random() > 0) {
                     let s1 = src[i];
                     let d1 = dst[j];
                     if (s1.n != d1.n) {
                         updateLink(s1.n, d1.n)
-                        if (Math.random() > 0.5) {
+                        if (Math.random() > p) {
                             stack.push([s1.c, dst])
-                        } else if (Math.random() > 0.5) {
+                        } else if (Math.random() > p) {
                             stack.push([src, d1.c])
-                        } else {
+                        } else if (Math.random() > p) {
                             stack.push([s1.c, d1.c])
                         }
                     }
@@ -135,7 +137,7 @@ function drawTreemap(d1, depth) {
             if ((d.x1 - d.x0) < minSize || (d.y1 - d.y0) < minSize) {
                 ifBreak = true
             } else {
-                let g = d3.select("svg").append('g');
+                let g = d3.select(".base").append('g');
                 g.attr("transform", `translate(${xoffset+d.x0},${yoffset+d.y0})`)
                     .attr("x", xoffset + d.x0) //does nothing, for easier ref
                     .attr("y", yoffset + d.y0) //does nothing, for easier ref
@@ -146,7 +148,7 @@ function drawTreemap(d1, depth) {
                     .attr("width", d.x1 - d.x0)
                     .attr("height", d.y1 - d.y0)
                     .attr("id", d.data.n);
-                drawn.add(d.data.n)
+                drawnNodes.add(d.data.n)
             }
         })
     });
@@ -155,12 +157,12 @@ function drawTreemap(d1, depth) {
     connectivityGraphs[d1.n] = graph;
     //debugDrawConnectivity(graph, padding)
 
-    // draw links whichever renders last
+    //draw links whichever renders last
     d1.children.forEach(x => {
         if (x.n in links) {
             let dsts = links[x.n];
             Object.keys(dsts).forEach(d => {
-                if (drawn.has(d)) {
+                if (drawnNodes.has(d)) {
                     drawLinks(x.n, d)
                         //setTimeout(() => { drawLinks(x.n, d) }, 0)
                 }

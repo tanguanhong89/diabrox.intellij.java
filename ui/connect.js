@@ -1,37 +1,29 @@
-let pixelCorrection = 2
+let pixelCorrection = 5 //increase to reduce path search problem
 let xPortCount = 1 //updown, up for in, down for out
 let yPortCount = 1
 
 function findBestPath(a, b, pp) {
-    let nodes = [a]
-
-    function foo(a, b, n) {
-        let neigh = connectivityGraphs[pp][a]
-        let dist = findDist(neigh[0], b)
-        let bestn = neigh[0]
-        for (let i = 1; i < neigh.length; i++) {
-            if (neigh[i] == b) {
-                bestn = b
-                break
+    let s1 = [
+        [a]
+    ]
+    let covered = new Set([a])
+    while (s1.length > 0) {
+        let path = s1.shift()
+        let lastNode = path.slice(-1)
+        let neigh = []
+        connectivityGraphs[pp][lastNode].forEach(x => {
+            if (!(covered.has(x))) neigh.push(x)
+        })
+        for (let i = 0; i < neigh.length; i++) {
+            let n = neigh[i]
+            if (n == b) {
+                return path.concat(n)
             }
-            if (!(neigh[i] in n)) {
-                let d2 = findDist(neigh[i], b)
-                if (d2 < dist) {
-                    bestn = neigh[i]
-                    dist = d2
-                }
-            }
+            covered.add(n)
+            s1.push(path.concat(n))
         }
-        if ((new Set(n)).has(bestn)) {
-            // TODO: find backtrack reason
-            console.log("backtracked, due to blocked shortest 1 neighbour")
-            return n
-        }
-        n.push(bestn)
-        if (bestn == b) return n
-        return foo(bestn, b, n)
     }
-    return foo(a, b, nodes)
+    throw ("No path found")
 }
 
 function findDist(xy, xy2) { //arbitary, not using sqrt for faster computation
@@ -41,59 +33,101 @@ function findDist(xy, xy2) { //arbitary, not using sqrt for faster computation
 }
 
 function drawLinks(n1, n2) {
+    if (n1 == n2) return []
     let n12 = n1 + "_" + n2
         // let n11 = n1.replace(/\./g, '\\.')
         // let n21 = n2.replace(/\./g, '\\.')
     let p1 = n1.split('.').slice(0, -1).join('.')
     let p2 = n2.split('.').slice(0, -1).join('.')
-        // let rect1 = $('#' + n11)[0],
-        //     rect2 = $('#' + n21)[0];
+    let n1s = n1.split('.')
+    let n2s = n2.split('.')
+    let n1level = n1s.length
+    let n2level = n2s.length
 
-    if (n12 in connectedLinks) {
-        return
-    }
+    let n1out = rectPorts[n1][0]
+    let n2in = rectPorts[n2][1]
 
-    if (p1 == p2) {
-        // if parents same, resolve internally
-        let ports1 = rectPorts[n1]
-        let ports2 = rectPorts[n2]
-        let n1out = ports1[0]
-        let n2in = ports2[1]
-        let bestDist = findDist(n1out, n2in)
-        for (let i = 1; i < ports1.length; i++) {
-            for (let j = 1; j < ports2.length; j++) {
-                let d1 = findDist(ports1[i], ports2[j])
-                if (d1 > bestDist) {
-                    n1out = ports1[i]
-                    n2in = ports2[j]
-                    bestDist = d1
-                }
-            }
-        }
+    function drawSVGLines(nodes, c, l) {
+        const svg = d3.select('.base')
+        if (!(l in drawnLines)) drawnLines[l] = new Set()
+        for (let i = 0; i < nodes.length - 1; i++) {
+            let xykey = [nodes[i], nodes[i + 1]].sort().join('.')
+            if (drawnLines[l].has(xykey)) continue
 
-        let bp = findBestPath(n1out, n2in, p1)
-
-        const svg = d3.select('svg')
-        for (let i = 0; i < bp.length - 1; i++) {
-            let x1y1 = bp[i].split('_');
+            let x1y1 = nodes[i].split('_');
             let x1 = +(x1y1[0])
             let y1 = +(x1y1[1])
 
-            let x2y2 = bp[i + 1].split('_');
+            let x2y2 = nodes[i + 1].split('_');
             let x2 = +(x2y2[0])
             let y2 = +(x2y2[1])
 
             svg.append('line')
-                .style("stroke", "red")
-                .style("stroke-width", 10 - p1.length)
+                .style("stroke", c)
+                .style("stroke-width", 2 * (50 - l ** 2))
                 .attr("x1", x1)
                 .attr("y1", y1)
                 .attr("x2", x2)
                 .attr("y2", y2);
+            drawnLines[l].add(xykey);
         }
+    }
+
+    if (p1 == p2) {
+        // if parents same, resolve internally   
+        let bp = findBestPath(n1out, n2in, p1)
+        drawSVGLines(bp, 'yellow', n1s.length)
         return bp
     } else {
         // if diff parents
+        let maxCommonLevel = Math.min(n1level, n2level)
+        let baseNodes = []
+        let commonParent = ''
+        for (let lvl = 0; lvl < maxCommonLevel; lvl++) {
+            let n1p = n1s.slice(0, lvl).join('.')
+            let n2p = n2s.slice(0, lvl).join('.')
+            if (n1p != n2p) {
+                baseNodes = drawLinks(n1p, n2p)
+                break
+            } else {
+                commonParent = n1p
+            }
+        }
+        if (baseNodes.length > 0) {
+            // baseNodes = commonParent.a1 -> commonParent.b1
+            // [prepend] commonParent.a1.a2 to baseNodes
+            // [append] commonParent.b1.b2 to baseNodes
+            let commonPLvl = commonParent.split('.').length
+            let prependID = n1s.slice(0, commonPLvl + 1).join('.')
+            let appendID = n2s.slice(0, commonPLvl + 1).join('.')
+            for (let i = commonPLvl + 2; i <= n1level; i++) {
+                let newID = n1s.slice(0, i).join('.')
+                let newIDPort = rectPorts[newID][0] // out
+                let prependPort = rectPorts[prependID][0]
+                if (prependPort != baseNodes[0]) {
+                    throw ("Mismatched ports")
+                }
+                let nodes = findBestPath(newIDPort, prependPort, n1s.slice(0, i - 1).join('.'))
+                baseNodes = nodes.slice(0, -1).concat(baseNodes)
+                prependID = newID
+            }
+
+            for (let i = commonPLvl + 2; i <= n2level; i++) {
+                let newID = n2s.slice(0, i).join('.')
+                let newIDPort = rectPorts[newID][1] // out
+                let appendPort = rectPorts[appendID][1]
+                if (appendPort != baseNodes[baseNodes.length - 1]) {
+                    throw ("Mismatched ports")
+                }
+                let nodes = findBestPath(appendPort, newIDPort, n2s.slice(0, i - 1).join('.'))
+                baseNodes = baseNodes.slice(0, -1).concat(nodes)
+                appendID = newID
+            }
+            drawSVGLines(baseNodes, 'red', n1s.length)
+            return baseNodes
+        }
+
+        console.log('diff parents')
     }
 }
 
@@ -119,13 +153,13 @@ function calculateConnectivity(parID, padding) {
 
     function addBidirect(a, b) {
         if (!(a in links)) {
-            links[a] = []
+            links[a] = new Set()
         }
         if (!(b in links)) {
-            links[b] = []
+            links[b] = new Set()
         }
-        links[a].push(b)
-        links[b].push(a)
+        links[a].add(b)
+        links[b].add(a)
     }
 
     function interpolate(a, b, cnt) {
@@ -137,6 +171,7 @@ function calculateConnectivity(parID, padding) {
     }
 
     let parentPorts = rectPorts[parID]
+    let parentPortsPadded = []
     if (parentPorts != undefined) {
         for (let i = 0; i < parentPorts.length; i++) { //map port to children
             let xy = parentPorts[i].split('_').map(x => +(x))
@@ -146,15 +181,15 @@ function calculateConnectivity(parID, padding) {
                 xy = i % 2 == 0 ? [findSnap(xy[0] - padding, "x"), xy[1]] : [findSnap(xy[0] + padding, "x"), xy[1]] //left,right
             }
             addBidirect(parentPorts[i], xy[0] + "_" + xy[1])
-            parentPorts[i] = xy.join('_')
+            parentPortsPadded.push([xy[0], xy[1]])
         }
     }
 
     function checkParentPortsIntercept(x1, x2, y1, y2) {
-        if (parentPorts == undefined) return
-        for (let i = 0; i < parentPorts.length; i++) {
-            let xy = parentPorts[i]
-            if (i < parentPorts.length / 2) {
+        if (parentPortsPadded == []) return
+        for (let i = 0; i < parentPortsPadded.length; i++) {
+            let xy = parentPortsPadded[i]
+            if (i < xPortCount * 2) {
                 if (xy[0] <= x2 && xy[0] >= x1 && y1 == xy[1] && y2 == y1) {
                     return xy
                 }

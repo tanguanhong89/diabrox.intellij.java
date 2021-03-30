@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<!-- saved from url=(0096)file:///home/phantomv/Desktop/KuwagataTech/diabrox/diabrox.intellij-main/ui/pathTestPanZoom.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style>
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    
+    #world {
+        height: 550px;
+        width: 100%;
+        background: #eee;
+    }
+    
+    line,
+    path {
+        stroke: #3c444d;
+    }
+    
+    line.trackspot {
+        stroke: #5f6973;
+        cursor: pointer;
+        /*stroke: teal*/
+    }
+    
+    #e20_circleArc {
+        stroke: #4d5053;
+    }
+    
+    #depot {
+        overflow: hidden;
+        display: inline;
+        width: inherit;
+        min-width: inherit;
+        max-width: inherit;
+        height: inherit;
+        min-height: inherit;
+        max-height: inherit;
+    }
+    
+    text {
+        fill: #fff;
+    }
+    
+    circle {
+        fill: #000;
+    }
+</style>
+
+
+    
+
+    
+
+    <script>
+        window.console = window.console || function(t) {};
+    </script>
+
+
+</head>
+
+<body>
+    <div id="view">
+    <svg id="svg" viewbox="0 0 2762 510" style="width: 1841px; height: 587px;background-color: black;position: absolute;"><rect fill="rgb(94, 79, 162)" width="44800" height="20800" id="1"></rect></svg></div>
+    <script src="file:///home/phantomv/Desktop/KuwagataTech/diabrox/diabrox.intellij-main/ui/QNPEvd_data/hammer.js"></script>
+    <script src="file:///home/phantomv/Desktop/KuwagataTech/diabrox/diabrox.intellij-main/ui/connect.js"></script>
+    <script src="file:///home/phantomv/Desktop/KuwagataTech/diabrox/diabrox.intellij-main/ui/a.js"></script>
+    <script src="./qqqqqq_files/d3.v6.min.js"></script>
+    <script src="./qqqqqq_files/jquery-3.5.1.slim.min.js"></script>
+    <script src="file:///home/phantomv/Desktop/KuwagataTech/diabrox/diabrox.intellij-main/ui/panzoom.js"></script>
+    <script id="rendered-js">
+        let height = $(window).height();
+        let width = $(window).width();
+
+        let base = $("<g/>", {
+            "id": "base",
+            "width": "48000",
+            "height": "24000",
+        });
+        let viewport = $("<g/>", {
+            "id": "viewport-1234",
+            "class": "svg-pan-zoom_viewport",
+        }).append(base);
+        let svg = $("<svg/>", {
+            "id": "svg",
+            "viewBox": "0 0 " + width + " " + height,
+            "style": "width: 1841px; height: 587px;background-color: black;position: absolute;",
+        }).append(viewport);
+        $('#view').append(svg);
+
+
+        let color = d3.scaleSequential([10, 0], d3.interpolateSpectral);
+
+        format = d3.format(",d");
+
+        drawTreemap({
+            "n": "base",
+            "children": [{
+                "n": "1",
+                "d": 0,
+                "v": 1
+            }]
+        }, 0)
+        createHierarchicalTreemap(data)
+    </script>
+
+
+</body></html>
