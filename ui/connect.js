@@ -23,7 +23,8 @@ function findBestPath(a, b, pp) {
             s1.push(path.concat(n))
         }
     }
-    throw ("No path found")
+    console.log("No path found")
+    return []
 }
 
 function findDist(xy, xy2) { //arbitary, not using sqrt for faster computation
@@ -48,7 +49,7 @@ function drawLinks(n1, n2) {
     let n2in = rectPorts[n2][1]
 
     function drawSVGLines(nodes, c, l) {
-        const svg = d3.select('.base')
+        const base = d3.select('#base')
         if (!(l in drawnLines)) drawnLines[l] = new Set()
         for (let i = 0; i < nodes.length - 1; i++) {
             let xykey = [nodes[i], nodes[i + 1]].sort().join('.')
@@ -62,9 +63,9 @@ function drawLinks(n1, n2) {
             let x2 = +(x2y2[0])
             let y2 = +(x2y2[1])
 
-            svg.append('line')
+            base.append('line')
                 .style("stroke", c)
-                .style("stroke-width", 2 * (50 - l ** 2))
+                .style("stroke-width", depthPadding[l - 1] / 2)
                 .attr("x1", x1)
                 .attr("y1", y1)
                 .attr("x2", x2)
@@ -243,8 +244,8 @@ function calculateConnectivity(parID, padding) {
 
         let child = grects[i].firstChild;
         rectPorts[child.id] = []
-        let width = +(child.getAttribute("width")) + 2 * padding
-        let height = +(child.getAttribute("height")) + 2 * padding
+        let width = +(child.style.width.replace('px', '')) + 2 * padding
+        let height = +(child.style.height.replace('px', '')) + 2 * padding
 
         x1 = findSnap(x1, 'x')
         y1 = findSnap(y1, 'y')
@@ -291,7 +292,7 @@ function calculateConnectivity(parID, padding) {
 }
 
 function debugDrawConnectivity(graph, padding) {
-    const svg = d3.select('svg')
+    const base = d3.select('#base')
     Object.keys(graph).forEach(x1y1s => {
         //this draws double lines since graph is bidirectional
         x1y1 = x1y1s.split('_');
@@ -302,7 +303,7 @@ function debugDrawConnectivity(graph, padding) {
             let x2 = +(x2y2[0])
             let y2 = +(x2y2[1])
 
-            svg.append('line')
+            base.append('line')
                 .style("stroke", "red")
                 .style("stroke-width", padding / 5)
                 .attr("x1", x1)

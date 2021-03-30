@@ -1,11 +1,12 @@
 //reasonably 5k obj with debugDraw, easily >10k~30k no debugDraw
-let data = generateData(4, 4); // 6,10
+let data = generateData(2, 2); // 6,10
 let links = generateLinks(data);
 let rectPorts = {}
 let connectivityGraphs = {}
 let drawnNodes = new Set();
 let drawnLines = {};
 let minSize = 1
+let depthPadding = {};
 
 function generateData(maxDepth, maxChildren) {
     let count = 0
@@ -42,6 +43,7 @@ function generateData(maxDepth, maxChildren) {
 
 function generateLinks(data) {
     // flattened to separate processing dependencies at different levels
+    let p = 0.95
     let links = {};
     let stack = [
         [data['c'], data['c']]
@@ -61,7 +63,6 @@ function generateLinks(data) {
     }
 
     function foo(src, dst) {
-        let p = 0.95
         for (i = 0; i < src.length; i++) {
             for (j = 0; j < dst.length; j++) {
                 if (Math.random() > 0) {
@@ -101,6 +102,7 @@ function clone(o, dep) {
     return o1;
 }
 
+
 function drawTreemap(d1, depth) {
     let ifBreak = false
     if (d1.children.length == 0) return true
@@ -112,9 +114,10 @@ function drawTreemap(d1, depth) {
     gid = gid.replace(/\./g, '\\.')
     let g = $(gid)[0];
 
-    let width = +(o.getAttribute("width"))
-    let height = +(o.getAttribute("height"));
+    let width = +(o.style.width.replace("px", ""))
+    let height = +(o.style.height.replace("px", ""));
     let padding = width / 30 + depth;
+    depthPadding[depth] = padding;
     d1.v = 0;
     treemap = (d1) =>
         d3
@@ -137,17 +140,19 @@ function drawTreemap(d1, depth) {
             if ((d.x1 - d.x0) < minSize || (d.y1 - d.y0) < minSize) {
                 ifBreak = true
             } else {
-                let g = d3.select(".base").append('g');
+                let g = d3.select("#base").append('g');
                 g.attr("transform", `translate(${xoffset+d.x0},${yoffset+d.y0})`)
                     .attr("x", xoffset + d.x0) //does nothing, for easier ref
                     .attr("y", yoffset + d.y0) //does nothing, for easier ref
                     .attr("class", "p" + d1.n)
                     .attr("id", "g-" + d.data.n);
+
                 g.append("rect")
-                    .attr("fill", color(d.data.d))
-                    .attr("width", d.x1 - d.x0)
-                    .attr("height", d.y1 - d.y0)
-                    .attr("id", d.data.n);
+                    .attr("id", d.data.n)
+                    .style("fill", color(d.data.d))
+                    .style("width", (d.x1 - d.x0) + "px")
+                    .style("height", (d.y1 - d.y0) + "px")
+
                 drawnNodes.add(d.data.n)
             }
         })
