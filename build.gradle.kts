@@ -43,7 +43,7 @@ repositories {
 }
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.15.0")
-    implementation ("com.google.protobuf:protobuf-java:3.11.0")
+    implementation ("com.google.protobuf:protobuf-java:3.21.8")
 }
 
 
